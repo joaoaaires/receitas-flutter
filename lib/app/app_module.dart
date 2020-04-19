@@ -3,6 +3,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter/material.dart';
 import 'package:receitas/app/app_widget.dart';
 import 'package:receitas/app/modules/home/home_module.dart';
+import 'package:receitas/app/modules/receita/receita_module.dart';
 
 class AppModule extends MainModule {
   @override
@@ -13,6 +14,10 @@ class AppModule extends MainModule {
   @override
   List<Router> get routers => [
         Router(Modular.initialRoute, module: HomeModule()),
+        //HOME
+//        Router('/home', module: HomeModule()),
+        //PESSOA
+        Router('/receita', module: ReceitaModule()),
       ];
 
   @override

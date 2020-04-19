@@ -90,7 +90,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
         color: Colors.transparent,
         child: InkWell(
           borderRadius: BorderRadius.circular(5.0),
-          onTap: () {},
+          onTap: () => Modular.to.pushNamed("/receita/form"),
           child: Stack(
             children: <Widget>[
               Positioned(
