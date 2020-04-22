@@ -1,0 +1,4 @@
+lib/app/modules/receita/page/list/receita_list/receita_list_page.dart
+test/app/modules/receita/page/list/receita_list/receita_list_page_test.dart
+lib/app/modules/receita/page/list/receita_list/receita_list_controller.dart
+test/app/modules/receita/page/list/receita_list/receita_list_controller_test.dart

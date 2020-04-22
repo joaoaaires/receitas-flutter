@@ -8,9 +8,9 @@ class ReceitaModule extends ChildModule {
 
   @override
   List<Router> get routers => [
-    Router('/', child: (_, args) => Container()),
-    Router('/form', module: ReceitaFormModule()),
-  ];
+        Router('/', child: (_, args) => Container()),
+        Router('/form', module: ReceitaFormModule()),
+      ];
 
   static Inject get to => Inject<ReceitaModule>.of();
 }
