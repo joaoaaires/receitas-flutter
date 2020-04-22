@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:receitas/app/modules/receita/page/widget/receita_dots.dart';
+import 'package:receitas/app/modules/receita/widget/receita_dots.dart';
 import 'package:receitas/app/shareds/widgets/text_form_field_custom.dart';
 import 'receita_form_controller.dart';
 

@@ -156,7 +156,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
 
   Widget getCardItem() {
     return Card(
-      elevation: 3.0,
+      elevation: 1.0,
       margin: EdgeInsets.only(top: 8.0),
       child: Material(
         color: Colors.transparent,
