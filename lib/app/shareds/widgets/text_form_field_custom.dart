@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class TextFormFieldCustom extends StatelessWidget {
+  String hintText;
   String labelText;
   String initialValue;
   Function(String) onSaved;
@@ -13,9 +14,10 @@ class TextFormFieldCustom extends StatelessWidget {
 
   TextFormFieldCustom({
     @required this.labelText,
+    this.hintText,
     this.initialValue,
     this.onSaved,
-    this.enableInteractiveSelection : true,
+    this.enableInteractiveSelection: true,
     this.keyboardType: TextInputType.text,
     this.inputFormatters: const <TextInputFormatter>[],
     this.validators,
@@ -31,6 +33,7 @@ class TextFormFieldCustom extends StatelessWidget {
       decoration: InputDecoration(
         border: OutlineInputBorder(),
         labelText: labelText,
+        hintText: hintText,
       ),
       validator: (value) {
         if (validators == null) return null;

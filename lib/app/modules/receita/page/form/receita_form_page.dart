@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:receitas/app/modules/receita/page/form/form_ingrediente/receita_form_ingrediente_page.dart';
 import 'package:receitas/app/modules/receita/widget/receita_dots.dart';
 import 'package:receitas/app/shareds/widgets/text_form_field_custom.dart';
 import 'receita_form_controller.dart';
@@ -72,6 +73,7 @@ class _ReceitaFormPageState
               scrollDirection: Axis.horizontal,
               onPageChanged: onPageChangedPageView,
               children: <Widget>[
+                ReceitaFormIngredientePage(),
                 Container(
                   margin: EdgeInsets.only(left: padding, right: padding),
                   decoration: BoxDecoration(
@@ -95,12 +97,9 @@ class _ReceitaFormPageState
               ],
             ),
           ),
-          SizedBox(
-            height: 8.0,
-          ),
           ReceitaDots(
             currentyIndex: _currentyIndex,
-            sizePage: 2,
+            sizePage: 3,
           ),
         ],
       ),
