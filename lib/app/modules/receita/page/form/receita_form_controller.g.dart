@@ -9,32 +9,44 @@ part of 'receita_form_controller.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$ReceitaFormController on _ReceitaFormControllerBase, Store {
-  final _$valueAtom = Atom(name: '_ReceitaFormControllerBase.value');
+  final _$ingredientesAtom =
+      Atom(name: '_ReceitaFormControllerBase.ingredientes');
 
   @override
-  int get value {
-    _$valueAtom.context.enforceReadPolicy(_$valueAtom);
-    _$valueAtom.reportObserved();
-    return super.value;
+  ObservableList<String> get ingredientes {
+    _$ingredientesAtom.context.enforceReadPolicy(_$ingredientesAtom);
+    _$ingredientesAtom.reportObserved();
+    return super.ingredientes;
   }
 
   @override
-  set value(int value) {
-    _$valueAtom.context.conditionallyRunInAction(() {
-      super.value = value;
-      _$valueAtom.reportChanged();
-    }, _$valueAtom, name: '${_$valueAtom.name}_set');
+  set ingredientes(ObservableList<String> value) {
+    _$ingredientesAtom.context.conditionallyRunInAction(() {
+      super.ingredientes = value;
+      _$ingredientesAtom.reportChanged();
+    }, _$ingredientesAtom, name: '${_$ingredientesAtom.name}_set');
   }
 
   final _$_ReceitaFormControllerBaseActionController =
       ActionController(name: '_ReceitaFormControllerBase');
 
   @override
-  void increment() {
+  void addIngrediente(String ingrediente) {
     final _$actionInfo =
         _$_ReceitaFormControllerBaseActionController.startAction();
     try {
-      return super.increment();
+      return super.addIngrediente(ingrediente);
+    } finally {
+      _$_ReceitaFormControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void delIngrediente(int index) {
+    final _$actionInfo =
+        _$_ReceitaFormControllerBaseActionController.startAction();
+    try {
+      return super.delIngrediente(index);
     } finally {
       _$_ReceitaFormControllerBaseActionController.endAction(_$actionInfo);
     }
@@ -42,7 +54,7 @@ mixin _$ReceitaFormController on _ReceitaFormControllerBase, Store {
 
   @override
   String toString() {
-    final string = 'value: ${value.toString()}';
+    final string = 'ingredientes: ${ingredientes.toString()}';
     return '{$string}';
   }
 }

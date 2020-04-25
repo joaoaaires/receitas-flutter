@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_modular/flutter_modular.dart';
+import 'package:receitas/app/modules/receita/page/form/receita_form_controller.dart';
 import 'package:receitas/app/shareds/widgets/buttom_custom.dart';
 import 'package:receitas/app/shareds/widgets/text_form_field_custom.dart';
 
@@ -16,6 +19,16 @@ class ReceitaFormIngredientePage extends StatefulWidget {
 
 class _ReceitaFormIngredientePageState
     extends State<ReceitaFormIngredientePage> {
+  TextEditingController _editingController;
+  ReceitaFormController _formIngredienteController;
+
+  @override
+  void initState() {
+    super.initState();
+    _formIngredienteController = Modular.get<ReceitaFormController>();
+    _editingController = TextEditingController();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -30,18 +43,64 @@ class _ReceitaFormIngredientePageState
               Expanded(
                 child: TextFormFieldCustom(
                   hintText: "10 ml, 100 gm, etc",
+                  controller: _editingController,
                 ),
               ),
               SizedBox(width: 8.0),
-              ButtomCustom(),
+              ButtomCustom(
+                heigth: 58,
+                width: 58,
+                colorButtom: Colors.green,
+                colorIcon: Colors.white,
+                icon: Icons.add,
+                onTap: () {
+                  _formIngredienteController.addIngrediente(
+                    _editingController.text,
+                  );
+                  _editingController.text = "";
+                },
+              ),
             ],
           ),
-          SizedBox(height: 8.0),
-          FlatButton(
-            onPressed: () {},
-            child: Icon(Icons.save),
+          Expanded(
+            child: Observer(
+              builder: (_) {
+                List<String> ingredientes =
+                    _formIngredienteController.ingredientes;
+                return ListView.builder(
+                  physics: BouncingScrollPhysics(),
+                  itemCount: ingredientes.length,
+                  itemBuilder: (_, index) {
+                    return getItemIngrediente(index, ingredientes[index]);
+                  },
+                );
+              },
+            ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget getItemIngrediente(int index, String ingrediente) {
+    BorderRadius borderRadius = BorderRadius.circular(5.0);
+
+    return Padding(
+      padding: EdgeInsets.only(top: 8.0),
+      child: Material(
+        elevation: 3.0,
+        color: Colors.white,
+        borderRadius: borderRadius,
+        child: ListTile(
+          title: Text(ingrediente),
+          trailing: IconButton(
+            onPressed: () => _formIngredienteController.delIngrediente(index),
+            icon: Icon(
+              Icons.delete,
+              color: Colors.red,
+            ),
+          ),
+        ),
       ),
     );
   }

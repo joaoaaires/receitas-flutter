@@ -7,10 +7,15 @@ class ReceitaFormController = _ReceitaFormControllerBase
 
 abstract class _ReceitaFormControllerBase with Store {
   @observable
-  int value = 0;
+  ObservableList<String> ingredientes = <String>[].asObservable();
 
   @action
-  void increment() {
-    value++;
+  void addIngrediente(String ingrediente) {
+    ingredientes.add(ingrediente);
+  }
+
+  @action
+  void delIngrediente(int index) {
+    ingredientes.removeAt(index);
   }
 }
