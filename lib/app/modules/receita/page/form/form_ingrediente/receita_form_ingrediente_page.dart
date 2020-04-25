@@ -19,13 +19,13 @@ class ReceitaFormIngredientePage extends StatefulWidget {
 
 class _ReceitaFormIngredientePageState
     extends State<ReceitaFormIngredientePage> {
+  ReceitaFormController _formController;
   TextEditingController _editingController;
-  ReceitaFormController _formIngredienteController;
 
   @override
   void initState() {
     super.initState();
-    _formIngredienteController = Modular.get<ReceitaFormController>();
+    _formController = Modular.get<ReceitaFormController>();
     _editingController = TextEditingController();
   }
 
@@ -54,7 +54,7 @@ class _ReceitaFormIngredientePageState
                 colorIcon: Colors.white,
                 icon: Icons.add,
                 onTap: () {
-                  _formIngredienteController.addIngrediente(
+                  _formController.addIngrediente(
                     _editingController.text,
                   );
                   _editingController.text = "";
@@ -65,8 +65,7 @@ class _ReceitaFormIngredientePageState
           Expanded(
             child: Observer(
               builder: (_) {
-                List<String> ingredientes =
-                    _formIngredienteController.ingredientes;
+                List<String> ingredientes = _formController.ingredientes;
                 return ListView.builder(
                   physics: BouncingScrollPhysics(),
                   itemCount: ingredientes.length,
@@ -94,7 +93,7 @@ class _ReceitaFormIngredientePageState
         child: ListTile(
           title: Text(ingrediente),
           trailing: IconButton(
-            onPressed: () => _formIngredienteController.delIngrediente(index),
+            onPressed: () => _formController.delIngrediente(index),
             icon: Icon(
               Icons.delete,
               color: Colors.red,

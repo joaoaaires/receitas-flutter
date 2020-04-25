@@ -7,7 +7,7 @@ class ButtomCustom extends StatelessWidget {
   final Color colorIcon;
   final IconData icon;
   final GestureTapCallback onTap;
-  final BorderRadius borderRadius = BorderRadius.circular(5.0);
+  final BorderRadius borderRadius = BorderRadius.circular(4.0);
 
   ButtomCustom({
     Key key,

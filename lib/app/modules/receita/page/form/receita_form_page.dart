@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:receitas/app/modules/receita/page/form/form_ingrediente/receita_form_ingrediente_page.dart';
+import 'package:receitas/app/modules/receita/page/form/form_modo_preparo/receita_form_modo_preparo_page.dart';
 import 'package:receitas/app/modules/receita/widget/receita_dots.dart';
 import 'package:receitas/app/shareds/widgets/text_form_field_custom.dart';
 import 'receita_form_controller.dart';
@@ -74,32 +75,13 @@ class _ReceitaFormPageState
               onPageChanged: onPageChangedPageView,
               children: <Widget>[
                 ReceitaFormIngredientePage(),
-                Container(
-                  margin: EdgeInsets.only(left: padding, right: padding),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5.0),
-                    border: Border.all(
-                      width: 1.0,
-                      color: Colors.grey,
-                    ),
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(left: padding, right: padding),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5.0),
-                    border: Border.all(
-                      width: 1.0,
-                      color: Colors.grey,
-                    ),
-                  ),
-                ),
+                ReceitaFormModoPreparoPage(),
               ],
             ),
           ),
           ReceitaDots(
             currentyIndex: _currentyIndex,
-            sizePage: 3,
+            sizePage: 2,
           ),
         ],
       ),

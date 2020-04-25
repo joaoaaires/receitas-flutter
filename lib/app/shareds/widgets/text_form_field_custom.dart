@@ -26,29 +26,36 @@ class TextFormFieldCustom extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      onSaved: onSaved,
-      initialValue: initialValue,
-      enableInteractiveSelection: enableInteractiveSelection,
-      decoration: InputDecoration(
-        border: OutlineInputBorder(),
-        labelText: labelText,
-        hintText: hintText,
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(4.0),
+        color: Colors.white,
       ),
-      validator: (value) {
-        if (validators == null) return null;
-        if (validators.length == 0) return null;
+      child: TextFormField(
+        onSaved: onSaved,
+        initialValue: initialValue,
+        enableInteractiveSelection: enableInteractiveSelection,
+        decoration: InputDecoration(
+          border: OutlineInputBorder(),
+          fillColor: Colors.white,
+          labelText: labelText,
+          hintText: hintText,
+        ),
+        validator: (value) {
+          if (validators == null) return null;
+          if (validators.length == 0) return null;
 
-        for (int i = 0; i < validators.length; i++) {
-          if (validators[i] != null && validators[i](value) != null)
-            return validators[i](value);
-        }
+          for (int i = 0; i < validators.length; i++) {
+            if (validators[i] != null && validators[i](value) != null)
+              return validators[i](value);
+          }
 
-        return null;
-      },
-      keyboardType: keyboardType,
-      inputFormatters: inputFormatters,
-      controller: controller,
+          return null;
+        },
+        keyboardType: keyboardType,
+        inputFormatters: inputFormatters,
+        controller: controller,
+      ),
     );
   }
 }

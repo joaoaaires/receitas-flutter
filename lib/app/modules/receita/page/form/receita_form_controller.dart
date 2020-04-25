@@ -8,6 +8,8 @@ class ReceitaFormController = _ReceitaFormControllerBase
 abstract class _ReceitaFormControllerBase with Store {
   @observable
   ObservableList<String> ingredientes = <String>[].asObservable();
+  @observable
+  ObservableList<String> modosPreparo = <String>[].asObservable();
 
   @action
   void addIngrediente(String ingrediente) {
@@ -17,5 +19,15 @@ abstract class _ReceitaFormControllerBase with Store {
   @action
   void delIngrediente(int index) {
     ingredientes.removeAt(index);
+  }
+
+  @action
+  void addModoPreparo(String modoPreparo) {
+    modosPreparo.add(modoPreparo);
+  }
+
+  @action
+  void delModoPreparo(int index) {
+    modosPreparo.removeAt(index);
   }
 }

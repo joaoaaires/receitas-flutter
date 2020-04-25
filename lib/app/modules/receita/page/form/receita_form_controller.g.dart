@@ -27,6 +27,24 @@ mixin _$ReceitaFormController on _ReceitaFormControllerBase, Store {
     }, _$ingredientesAtom, name: '${_$ingredientesAtom.name}_set');
   }
 
+  final _$modosPreparoAtom =
+      Atom(name: '_ReceitaFormControllerBase.modosPreparo');
+
+  @override
+  ObservableList<String> get modosPreparo {
+    _$modosPreparoAtom.context.enforceReadPolicy(_$modosPreparoAtom);
+    _$modosPreparoAtom.reportObserved();
+    return super.modosPreparo;
+  }
+
+  @override
+  set modosPreparo(ObservableList<String> value) {
+    _$modosPreparoAtom.context.conditionallyRunInAction(() {
+      super.modosPreparo = value;
+      _$modosPreparoAtom.reportChanged();
+    }, _$modosPreparoAtom, name: '${_$modosPreparoAtom.name}_set');
+  }
+
   final _$_ReceitaFormControllerBaseActionController =
       ActionController(name: '_ReceitaFormControllerBase');
 
@@ -53,8 +71,31 @@ mixin _$ReceitaFormController on _ReceitaFormControllerBase, Store {
   }
 
   @override
+  void addModoPreparo(String modoPreparo) {
+    final _$actionInfo =
+        _$_ReceitaFormControllerBaseActionController.startAction();
+    try {
+      return super.addModoPreparo(modoPreparo);
+    } finally {
+      _$_ReceitaFormControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void delModoPreparo(int index) {
+    final _$actionInfo =
+        _$_ReceitaFormControllerBaseActionController.startAction();
+    try {
+      return super.delModoPreparo(index);
+    } finally {
+      _$_ReceitaFormControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
-    final string = 'ingredientes: ${ingredientes.toString()}';
+    final string =
+        'ingredientes: ${ingredientes.toString()},modosPreparo: ${modosPreparo.toString()}';
     return '{$string}';
   }
 }

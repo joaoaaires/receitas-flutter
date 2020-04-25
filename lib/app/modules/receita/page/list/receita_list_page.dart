@@ -49,7 +49,7 @@ class _ReceitaListPageState extends State<ReceitaListPage> {
   }
 
   Widget getButtonNovaReceita() {
-    BorderRadius borderRadius = BorderRadius.circular(5.0);
+    BorderRadius borderRadius = BorderRadius.circular(4.0);
     double heightScreen = MediaQuery.of(context).size.height;
 
     return Material(
@@ -120,7 +120,7 @@ class _ReceitaListPageState extends State<ReceitaListPage> {
   }
 
   Widget getItemReceita() {
-    BorderRadius borderRadius = BorderRadius.circular(5.0);
+    BorderRadius borderRadius = BorderRadius.circular(4.0);
 
     return Padding(
       padding: EdgeInsets.only(top: 8.0),
