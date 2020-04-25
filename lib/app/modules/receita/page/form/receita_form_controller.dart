@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 
 part 'receita_form_controller.g.dart';
@@ -6,6 +7,7 @@ class ReceitaFormController = _ReceitaFormControllerBase
     with _$ReceitaFormController;
 
 abstract class _ReceitaFormControllerBase with Store {
+  final FocusNode focusNode = new FocusNode();
   @observable
   ObservableList<String> ingredientes = <String>[].asObservable();
   @observable

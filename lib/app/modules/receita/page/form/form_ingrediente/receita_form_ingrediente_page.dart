@@ -54,6 +54,7 @@ class _ReceitaFormIngredientePageState
                 colorIcon: Colors.white,
                 icon: Icons.add,
                 onTap: () {
+                  FocusScope.of(context).requestFocus(new FocusNode());
                   _formController.addIngrediente(
                     _editingController.text,
                   );

@@ -53,6 +53,7 @@ class _ReceitaFormModoPreparoPageState
                 colorIcon: Colors.white,
                 icon: Icons.add,
                 onTap: () {
+                  FocusScope.of(context).requestFocus(new FocusNode());
                   _formController.addModoPreparo(
                     _editingController.text,
                   );
@@ -88,12 +89,12 @@ class _ReceitaFormModoPreparoPageState
 
     return Padding(
       padding: const EdgeInsets.only(top: 8.0),
-      child: Row(
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 8.0,
-            ),
+      child: Material(
+        elevation: 3.0,
+        color: Colors.white,
+        borderRadius: borderRadius,
+        child: ListTile(
+          leading: CircleAvatar(
             child: Text(
               "${size - index}",
               style: TextStyle(
@@ -102,48 +103,15 @@ class _ReceitaFormModoPreparoPageState
               ),
             ),
           ),
-          Expanded(
-            child: Material(
-              elevation: 3.0,
-              color: Colors.white,
-              borderRadius: borderRadius,
-              child: ListTile(
-                title: Text(modoPreparo),
-                trailing: IconButton(
-                  onPressed: () => _formController.delModoPreparo(index),
-                  icon: Icon(
-                    Icons.delete,
-                    color: Colors.red,
-                  ),
-                ),
-              ),
+          title: Text(modoPreparo),
+          trailing: IconButton(
+            onPressed: () => _formController.delModoPreparo(index),
+            icon: Icon(
+              Icons.delete,
+              color: Colors.red,
             ),
           ),
-        ],
-      ),
-    );
-
-    return Padding(
-      padding: EdgeInsets.only(top: 8.0),
-      child: Row(
-        children: <Widget>[
-          Text("${index + 1}"),
-          Material(
-            elevation: 3.0,
-            color: Colors.white,
-            borderRadius: borderRadius,
-            child: ListTile(
-              title: Text(modoPreparo),
-              trailing: IconButton(
-                onPressed: () => _formController.delModoPreparo(index),
-                icon: Icon(
-                  Icons.delete,
-                  color: Colors.red,
-                ),
-              ),
-            ),
-          )
-        ],
+        ),
       ),
     );
   }

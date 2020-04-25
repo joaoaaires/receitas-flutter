@@ -18,13 +18,13 @@ class ReceitaFormPage extends StatefulWidget {
 
 class _ReceitaFormPageState
     extends ModularState<ReceitaFormPage, ReceitaFormController> {
-  //use 'controller' variable to access controller
-
   int _currentyIndex;
+  ReceitaFormController _formController;
 
   @override
   void initState() {
     super.initState();
+    _formController = Modular.get<ReceitaFormController>();
     this._currentyIndex = 0;
   }
 
@@ -65,8 +65,9 @@ class _ReceitaFormPageState
               labelText: "Título",
             ),
           ),
-          SizedBox(
-            height: 8.0,
+          ReceitaDots(
+            currentyIndex: _currentyIndex,
+            sizePage: 2,
           ),
           Expanded(
             child: PageView(
@@ -79,19 +80,15 @@ class _ReceitaFormPageState
               ],
             ),
           ),
-          ReceitaDots(
-            currentyIndex: _currentyIndex,
-            sizePage: 2,
-          ),
         ],
       ),
     );
   }
 
   void onPageChangedPageView(index) {
+    FocusScope.of(context).requestFocus(new FocusNode());
     setState(() {
       _currentyIndex = index;
     });
   }
-
 }
