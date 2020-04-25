@@ -3,6 +3,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:receitas/app/modules/receita/page/form/form_ingrediente/receita_form_ingrediente_page.dart';
 import 'package:receitas/app/modules/receita/page/form/form_modo_preparo/receita_form_modo_preparo_page.dart';
 import 'package:receitas/app/modules/receita/widget/receita_dots.dart';
+import 'package:receitas/app/shareds/utils/validator/validator.dart';
 import 'package:receitas/app/shareds/widgets/text_form_field_custom.dart';
 import 'receita_form_controller.dart';
 
@@ -18,14 +19,12 @@ class ReceitaFormPage extends StatefulWidget {
 
 class _ReceitaFormPageState
     extends ModularState<ReceitaFormPage, ReceitaFormController> {
-  int _currentyIndex;
   ReceitaFormController _formController;
 
   @override
   void initState() {
     super.initState();
-    _formController = Modular.get<ReceitaFormController>();
-    this._currentyIndex = 0;
+    this._formController = Modular.get<ReceitaFormController>();
   }
 
   @override
@@ -52,21 +51,26 @@ class _ReceitaFormPageState
 
   Widget getBody() {
     const double padding = 16.0;
-    double heightScreen = MediaQuery.of(context).size.height;
 
     return Container(
       width: double.infinity,
       height: double.infinity,
       child: Column(
         children: <Widget>[
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: padding),
-            child: TextFormFieldCustom(
-              labelText: "Título",
+          Form(
+            key: _formController.formKey,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: padding),
+              child: TextFormFieldCustom(
+                labelText: "Título",
+                initialValue: _formController.receita.titulo,
+                onSaved: (value) => _formController.receita.titulo = value,
+                validators: [Validator.required()],
+              ),
             ),
           ),
           ReceitaDots(
-            currentyIndex: _currentyIndex,
+            currentyIndex: _formController.currentyIndex,
             sizePage: 2,
           ),
           Expanded(
@@ -88,7 +92,7 @@ class _ReceitaFormPageState
   void onPageChangedPageView(index) {
     FocusScope.of(context).requestFocus(new FocusNode());
     setState(() {
-      _currentyIndex = index;
+      _formController.currentyIndex = index;
     });
   }
 }

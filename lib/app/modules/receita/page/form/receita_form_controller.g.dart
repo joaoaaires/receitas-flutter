@@ -13,14 +13,14 @@ mixin _$ReceitaFormController on _ReceitaFormControllerBase, Store {
       Atom(name: '_ReceitaFormControllerBase.ingredientes');
 
   @override
-  ObservableList<String> get ingredientes {
+  ObservableList<Ingrediente> get ingredientes {
     _$ingredientesAtom.context.enforceReadPolicy(_$ingredientesAtom);
     _$ingredientesAtom.reportObserved();
     return super.ingredientes;
   }
 
   @override
-  set ingredientes(ObservableList<String> value) {
+  set ingredientes(ObservableList<Ingrediente> value) {
     _$ingredientesAtom.context.conditionallyRunInAction(() {
       super.ingredientes = value;
       _$ingredientesAtom.reportChanged();
@@ -31,14 +31,14 @@ mixin _$ReceitaFormController on _ReceitaFormControllerBase, Store {
       Atom(name: '_ReceitaFormControllerBase.modosPreparo');
 
   @override
-  ObservableList<String> get modosPreparo {
+  ObservableList<ModoPreparo> get modosPreparo {
     _$modosPreparoAtom.context.enforceReadPolicy(_$modosPreparoAtom);
     _$modosPreparoAtom.reportObserved();
     return super.modosPreparo;
   }
 
   @override
-  set modosPreparo(ObservableList<String> value) {
+  set modosPreparo(ObservableList<ModoPreparo> value) {
     _$modosPreparoAtom.context.conditionallyRunInAction(() {
       super.modosPreparo = value;
       _$modosPreparoAtom.reportChanged();

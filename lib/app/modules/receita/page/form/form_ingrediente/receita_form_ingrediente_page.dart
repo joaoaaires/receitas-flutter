@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:receitas/app/modules/receita/model/ingrediente.dart';
 import 'package:receitas/app/modules/receita/page/form/receita_form_controller.dart';
 import 'package:receitas/app/shareds/widgets/buttom_custom.dart';
 import 'package:receitas/app/shareds/widgets/text_form_field_custom.dart';
@@ -66,13 +67,12 @@ class _ReceitaFormIngredientePageState
           Expanded(
             child: Observer(
               builder: (_) {
-                List<String> ingredientes = _formController.ingredientes;
+                List<Ingrediente> ingredientes = _formController.ingredientes;
                 return ListView.builder(
                   physics: BouncingScrollPhysics(),
                   itemCount: ingredientes.length,
-                  itemBuilder: (_, index) {
-                    return getItemIngrediente(index, ingredientes[index]);
-                  },
+                  itemBuilder: (_, index) =>
+                      getItemIngrediente(index, ingredientes[index]),
                 );
               },
             ),
@@ -82,7 +82,7 @@ class _ReceitaFormIngredientePageState
     );
   }
 
-  Widget getItemIngrediente(int index, String ingrediente) {
+  Widget getItemIngrediente(int index, Ingrediente ingrediente) {
     BorderRadius borderRadius = BorderRadius.circular(5.0);
 
     return Padding(
@@ -92,13 +92,10 @@ class _ReceitaFormIngredientePageState
         color: Colors.white,
         borderRadius: borderRadius,
         child: ListTile(
-          title: Text(ingrediente),
+          title: Text(ingrediente.descricao),
           trailing: IconButton(
             onPressed: () => _formController.delIngrediente(index),
-            icon: Icon(
-              Icons.delete,
-              color: Colors.red,
-            ),
+            icon: Icon(Icons.delete, color: Colors.red),
           ),
         ),
       ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:receitas/app/modules/receita/model/modo_preparo.dart';
 import 'package:receitas/app/modules/receita/page/form/receita_form_controller.dart';
 import 'package:receitas/app/shareds/widgets/buttom_custom.dart';
 import 'package:receitas/app/shareds/widgets/text_form_field_custom.dart';
@@ -65,13 +66,17 @@ class _ReceitaFormModoPreparoPageState
           Expanded(
             child: Observer(
               builder: (_) {
-                List<String> modosPreparo =
+                List<ModoPreparo> modosPreparo =
                     _formController.modosPreparo.reversed.toList();
                 return ListView.builder(
                   physics: BouncingScrollPhysics(),
                   itemCount: modosPreparo.length,
                   itemBuilder: (_, index) {
-                    return getItemModoPreparo(index, modosPreparo);
+                    return getItemModoPreparo(
+                      index,
+                      modosPreparo[index],
+                      modosPreparo.length,
+                    );
                   },
                 );
               },
@@ -82,9 +87,7 @@ class _ReceitaFormModoPreparoPageState
     );
   }
 
-  Widget getItemModoPreparo(int index, List<String> modosPreparo) {
-    int size = modosPreparo.length;
-    String modoPreparo = modosPreparo[index];
+  Widget getItemModoPreparo(int index, ModoPreparo modoPreparo, int size) {
     BorderRadius borderRadius = BorderRadius.circular(5.0);
 
     return Padding(
@@ -103,7 +106,7 @@ class _ReceitaFormModoPreparoPageState
               ),
             ),
           ),
-          title: Text(modoPreparo),
+          title: Text(modoPreparo.descricao),
           trailing: IconButton(
             onPressed: () => _formController.delModoPreparo(index),
             icon: Icon(

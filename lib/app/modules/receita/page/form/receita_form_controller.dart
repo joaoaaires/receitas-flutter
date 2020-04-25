@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
+import 'package:receitas/app/modules/receita/model/ingrediente.dart';
+import 'package:receitas/app/modules/receita/model/modo_preparo.dart';
+import 'package:receitas/app/modules/receita/model/receita.dart';
 
 part 'receita_form_controller.g.dart';
 
@@ -7,15 +10,20 @@ class ReceitaFormController = _ReceitaFormControllerBase
     with _$ReceitaFormController;
 
 abstract class _ReceitaFormControllerBase with Store {
-  final FocusNode focusNode = new FocusNode();
+  Receita receita = new Receita();
   @observable
-  ObservableList<String> ingredientes = <String>[].asObservable();
+  ObservableList<Ingrediente> ingredientes = <Ingrediente>[].asObservable();
   @observable
-  ObservableList<String> modosPreparo = <String>[].asObservable();
+  ObservableList<ModoPreparo> modosPreparo = <ModoPreparo>[].asObservable();
+
+  int currentyIndex = 0;
+  GlobalKey formKey = GlobalKey<FormState>();
 
   @action
   void addIngrediente(String ingrediente) {
-    ingredientes.add(ingrediente);
+    ingredientes.add(Ingrediente(
+      descricao: ingrediente,
+    ));
   }
 
   @action
@@ -25,7 +33,9 @@ abstract class _ReceitaFormControllerBase with Store {
 
   @action
   void addModoPreparo(String modoPreparo) {
-    modosPreparo.add(modoPreparo);
+    modosPreparo.add(ModoPreparo(
+      descricao: modoPreparo,
+    ));
   }
 
   @action
