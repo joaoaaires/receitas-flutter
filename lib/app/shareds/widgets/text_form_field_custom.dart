@@ -29,7 +29,7 @@ class TextFormFieldCustom extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(4.0),
-        color: Colors.white,
+        color: Colors.transparent,
       ),
       child: TextFormField(
         onSaved: onSaved,

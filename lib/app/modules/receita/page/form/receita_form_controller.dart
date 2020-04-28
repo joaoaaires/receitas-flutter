@@ -10,14 +10,14 @@ class ReceitaFormController = _ReceitaFormControllerBase
     with _$ReceitaFormController;
 
 abstract class _ReceitaFormControllerBase with Store {
-  Receita receita = new Receita();
   @observable
   ObservableList<Ingrediente> ingredientes = <Ingrediente>[].asObservable();
   @observable
   ObservableList<ModoPreparo> modosPreparo = <ModoPreparo>[].asObservable();
 
   int currentyIndex = 0;
-  GlobalKey formKey = GlobalKey<FormState>();
+  Receita receita = new Receita();
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   @action
   void addIngrediente(String ingrediente) {
@@ -42,4 +42,13 @@ abstract class _ReceitaFormControllerBase with Store {
   void delModoPreparo(int index) {
     modosPreparo.removeAt(index);
   }
+
+  Future<Null> save() {
+    if (!formKey.currentState.validate()) return null;
+
+    formKey.currentState.save();
+
+
+  }
+
 }

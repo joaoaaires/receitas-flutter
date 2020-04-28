@@ -42,7 +42,7 @@ class _ReceitaFormPageState
       elevation: 0.0,
       actions: <Widget>[
         IconButton(
-          onPressed: () {},
+          onPressed: _formController.save,
           icon: Icon(Icons.save),
         ),
       ],
