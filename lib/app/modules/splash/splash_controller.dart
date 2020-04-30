@@ -1,15 +1,15 @@
-import 'package:mobx/mobx.dart';
 
-part 'splash_controller.g.dart';
+import 'package:receitas/app/shareds/utils/database_helper.dart';
+import 'package:sqflite/sqflite.dart';
 
-class SplashController = _SplashControllerBase with _$SplashController;
+class SplashController {
+  final DatabaseHelper _halper;
 
-abstract class _SplashControllerBase with Store {
-  @observable
-  int value = 0;
+  SplashController(this._halper);
 
-  @action
-  void increment() {
-    value++;
+  Future<Null> loading() async {
+    await Future.delayed(Duration(seconds: 2));
+    Database database = await this._halper.database;
+    print("database ok!");
   }
 }

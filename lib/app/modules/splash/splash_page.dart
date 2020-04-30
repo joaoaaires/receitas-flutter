@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'splash_controller.dart';
 
 class SplashPage extends StatefulWidget {
   final String title;
+
   const SplashPage({Key key, this.title = "Splash"}) : super(key: key);
 
   @override
@@ -11,27 +13,88 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends ModularState<SplashPage, SplashController> {
-  //use 'controller' variable to access controller
+
+  SplashController _splashController = Modular.get<SplashController>();
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-//    SchedulerBinding.instance.addPostFrameCallback((_) {
-//      _splashController.loading().then((response) {
-//        Modular.to.pushReplacementNamed("/home");
-//      });
-//    });
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      _splashController.loading().then((response) {
+        Modular.to.pushReplacementNamed("/home");
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Column(
-        children: <Widget>[],
+    return getBuild();
+  }
+
+  Widget getBuild() {
+    return Material(
+      child: Stack(
+        fit: StackFit.expand,
+        children: <Widget>[
+          Container(
+            decoration: BoxDecoration(color: Theme.of(context).primaryColor),
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Expanded(
+                flex: 2,
+                child: Container(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      CircleAvatar(
+                        backgroundColor: Colors.white,
+                        radius: 50.0,
+                        child: Icon(
+                          Icons.shopping_cart,
+                          size: 50.0,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 10.0),
+                      ),
+                      Text(
+                        "Shopping!",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 24.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    CircularProgressIndicator(
+                      backgroundColor: Colors.white,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 20.0),
+                    ),
+                    Text(
+                      "Carregando...",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 22.0,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
