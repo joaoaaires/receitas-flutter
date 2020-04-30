@@ -13,13 +13,14 @@ class ModoPreparoRepository {
       modoPreparo.id = await db.rawInsert(
         "INSERT INTO modopreparo (idreceita, descricao) VALUES (?, ?);",
         [
-          modoPreparo.titulo,
+          modoPreparo.idreceita,
+          modoPreparo.descricao,
         ],
       );
       return modoPreparo;
     } catch (e) {
       print(e);
-      throw "Não é possível criar receita.";
+      throw "Não é possível criar modo de preparo.";
     }
   }
 

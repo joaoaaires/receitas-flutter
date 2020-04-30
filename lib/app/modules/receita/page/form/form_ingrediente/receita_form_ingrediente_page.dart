@@ -3,6 +3,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:receitas/app/modules/receita/model/ingrediente.dart';
 import 'package:receitas/app/modules/receita/page/form/receita_form_controller.dart';
+import 'package:receitas/app/shareds/utils/validator/validator.dart';
 import 'package:receitas/app/shareds/widgets/buttom_custom.dart';
 import 'package:receitas/app/shareds/widgets/text_form_field_custom.dart';
 
@@ -20,6 +21,7 @@ class ReceitaFormIngredientePage extends StatefulWidget {
 
 class _ReceitaFormIngredientePageState
     extends State<ReceitaFormIngredientePage> {
+  GlobalKey<FormState> _formKey;
   ReceitaFormController _formController;
   TextEditingController _editingController;
 
@@ -28,10 +30,21 @@ class _ReceitaFormIngredientePageState
     super.initState();
     _formController = Modular.get<ReceitaFormController>();
     _editingController = TextEditingController();
+    _formKey = GlobalKey();
+  }
+
+  @override
+  void dispose() {
+    _editingController?.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    return getBody();
+  }
+
+  Widget getBody() {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Column(
@@ -39,30 +52,30 @@ class _ReceitaFormIngredientePageState
         children: <Widget>[
           Text("Ingredientes"),
           SizedBox(height: 8.0),
-          Row(
-            children: <Widget>[
-              Expanded(
-                child: TextFormFieldCustom(
-                  hintText: "10 ml, 100 gm, etc",
-                  controller: _editingController,
+          Form(
+            key: _formKey,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Expanded(
+                  child: TextFormFieldCustom(
+                    hintText: "10 ml, 100 gm, etc",
+                    validators: [Validator.required()],
+                    controller: _editingController,
+                  ),
                 ),
-              ),
-              SizedBox(width: 8.0),
-              ButtomCustom(
-                heigth: 58,
-                width: 58,
-                colorButtom: Colors.green,
-                colorIcon: Colors.white,
-                icon: Icons.add,
-                onTap: () {
-                  FocusScope.of(context).requestFocus(new FocusNode());
-                  _formController.addIngrediente(
-                    _editingController.text,
-                  );
-                  _editingController.text = "";
-                },
-              ),
-            ],
+                SizedBox(width: 8.0),
+                ButtomCustom(
+                  heigth: 58,
+                  width: 58,
+                  onTap: onTapSaveIngrediente,
+                  colorButtom: Colors.green,
+                  colorIcon: Colors.white,
+                  icon: Icons.add,
+                ),
+              ],
+            ),
           ),
           Expanded(
             child: Observer(
@@ -72,7 +85,7 @@ class _ReceitaFormIngredientePageState
                   physics: BouncingScrollPhysics(),
                   itemCount: ingredientes.length,
                   itemBuilder: (_, index) =>
-                      getItemIngrediente(index, ingredientes[index]),
+                      getItemIngrediente(ingredientes[index]),
                 );
               },
             ),
@@ -82,7 +95,7 @@ class _ReceitaFormIngredientePageState
     );
   }
 
-  Widget getItemIngrediente(int index, Ingrediente ingrediente) {
+  Widget getItemIngrediente(Ingrediente ingrediente) {
     BorderRadius borderRadius = BorderRadius.circular(5.0);
 
     return Padding(
@@ -94,11 +107,32 @@ class _ReceitaFormIngredientePageState
         child: ListTile(
           title: Text(ingrediente.descricao),
           trailing: IconButton(
-            onPressed: () => _formController.delIngrediente(index),
+            onPressed: () => onPressedRemoveIngrediente(ingrediente),
             icon: Icon(Icons.delete, color: Colors.red),
           ),
         ),
       ),
     );
+  }
+
+  void onTapSaveIngrediente() {
+    if (_formKey.currentState.validate()) {
+      _formKey.currentState.save();
+
+      FocusScope.of(context).requestFocus(new FocusNode());
+
+      _formController.addIngrediente(Ingrediente(
+        descricao: _editingController.text,
+      ));
+
+      setState(
+        () => _editingController.text = "",
+      );
+    }
+  }
+
+  void onPressedRemoveIngrediente(Ingrediente ingrediente) {
+    FocusScope.of(context).requestFocus(new FocusNode());
+    _formController.delIngrediente(ingrediente);
   }
 }

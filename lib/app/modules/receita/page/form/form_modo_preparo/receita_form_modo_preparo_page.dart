@@ -3,6 +3,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:receitas/app/modules/receita/model/modo_preparo.dart';
 import 'package:receitas/app/modules/receita/page/form/receita_form_controller.dart';
+import 'package:receitas/app/shareds/utils/validator/validator.dart';
 import 'package:receitas/app/shareds/widgets/buttom_custom.dart';
 import 'package:receitas/app/shareds/widgets/text_form_field_custom.dart';
 
@@ -19,6 +20,7 @@ class ReceitaFormModoPreparoPage extends StatefulWidget {
 
 class _ReceitaFormModoPreparoPageState
     extends State<ReceitaFormModoPreparoPage> {
+  GlobalKey<FormState> _formKey;
   ReceitaFormController _formController;
   TextEditingController _editingController;
 
@@ -27,10 +29,21 @@ class _ReceitaFormModoPreparoPageState
     super.initState();
     _formController = Modular.get<ReceitaFormController>();
     _editingController = TextEditingController();
+    _formKey = GlobalKey();
+  }
+
+  @override
+  void dispose() {
+    _editingController?.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    return getBody();
+  }
+
+  Widget getBody() {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Column(
@@ -38,30 +51,28 @@ class _ReceitaFormModoPreparoPageState
         children: <Widget>[
           Text("Modos de Preparos"),
           SizedBox(height: 8.0),
-          Row(
-            children: <Widget>[
-              Expanded(
-                child: TextFormFieldCustom(
-                  hintText: "Levar ao forno por...",
-                  controller: _editingController,
+          Form(
+            key: _formKey,
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: TextFormFieldCustom(
+                    hintText: "Levar ao forno por...",
+                    validators: [Validator.required()],
+                    controller: _editingController,
+                  ),
                 ),
-              ),
-              SizedBox(width: 8.0),
-              ButtomCustom(
-                heigth: 58,
-                width: 58,
-                colorButtom: Colors.green,
-                colorIcon: Colors.white,
-                icon: Icons.add,
-                onTap: () {
-                  FocusScope.of(context).requestFocus(new FocusNode());
-                  _formController.addModoPreparo(
-                    _editingController.text,
-                  );
-                  _editingController.text = "";
-                },
-              ),
-            ],
+                SizedBox(width: 8.0),
+                ButtomCustom(
+                  heigth: 58,
+                  width: 58,
+                  onTap: onTapSaveModoPreparo,
+                  colorButtom: Colors.green,
+                  colorIcon: Colors.white,
+                  icon: Icons.add,
+                ),
+              ],
+            ),
           ),
           Expanded(
             child: Observer(
@@ -108,7 +119,7 @@ class _ReceitaFormModoPreparoPageState
           ),
           title: Text(modoPreparo.descricao),
           trailing: IconButton(
-            onPressed: () => _formController.delModoPreparo(index),
+//            onPressed: () => _formController.delModoPreparo(index),
             icon: Icon(
               Icons.delete,
               color: Colors.red,
@@ -117,5 +128,21 @@ class _ReceitaFormModoPreparoPageState
         ),
       ),
     );
+  }
+
+  void onTapSaveModoPreparo() {
+    if (_formKey.currentState.validate()) {
+      _formKey.currentState.save();
+
+      FocusScope.of(context).requestFocus(new FocusNode());
+
+      _formController.addModoPreparo(ModoPreparo(
+        descricao: _editingController.text,
+      ));
+
+      setState(
+        () => _editingController.text = "",
+      );
+    }
   }
 }

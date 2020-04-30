@@ -49,7 +49,7 @@ mixin _$ReceitaFormController on _ReceitaFormControllerBase, Store {
       ActionController(name: '_ReceitaFormControllerBase');
 
   @override
-  void addIngrediente(String ingrediente) {
+  void addIngrediente(Ingrediente ingrediente) {
     final _$actionInfo =
         _$_ReceitaFormControllerBaseActionController.startAction();
     try {
@@ -60,18 +60,18 @@ mixin _$ReceitaFormController on _ReceitaFormControllerBase, Store {
   }
 
   @override
-  void delIngrediente(int index) {
+  void delIngrediente(Ingrediente ingrediente) {
     final _$actionInfo =
         _$_ReceitaFormControllerBaseActionController.startAction();
     try {
-      return super.delIngrediente(index);
+      return super.delIngrediente(ingrediente);
     } finally {
       _$_ReceitaFormControllerBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  void addModoPreparo(String modoPreparo) {
+  void addModoPreparo(ModoPreparo modoPreparo) {
     final _$actionInfo =
         _$_ReceitaFormControllerBaseActionController.startAction();
     try {
@@ -82,11 +82,11 @@ mixin _$ReceitaFormController on _ReceitaFormControllerBase, Store {
   }
 
   @override
-  void delModoPreparo(int index) {
+  void delModoPreparo(ModoPreparo modoPreparo) {
     final _$actionInfo =
         _$_ReceitaFormControllerBaseActionController.startAction();
     try {
-      return super.delModoPreparo(index);
+      return super.delModoPreparo(modoPreparo);
     } finally {
       _$_ReceitaFormControllerBaseActionController.endAction(_$actionInfo);
     }

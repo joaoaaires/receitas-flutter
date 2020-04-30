@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class DialogCustom {
   /// EXIBE UM DIALOG PARA O USUARIO FICAR ESPERANDO
-  static void showProgress(context, text) {
+  static void showProgress(context, {text : "Aguarde..."}) {
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -28,20 +28,14 @@ class DialogCustom {
   }
 
   /// EXIBE UM DIALOG DE ALERTA PARA USUARIO
-  static void showAlertDialogUtil(context, title, List<String> texts) {
+  static void showAlertDialogUtil(BuildContext context, String title, String text) {
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(title),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: List.generate(texts.length, (index) {
-                return Text(texts[index]);
-              }),
-            ),
-          ),
+          content: Text(text),
           actions: <Widget>[
             FlatButton(
               child: Text('Ok'),

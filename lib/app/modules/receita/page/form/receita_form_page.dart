@@ -4,6 +4,7 @@ import 'package:receitas/app/modules/receita/page/form/form_ingrediente/receita_
 import 'package:receitas/app/modules/receita/page/form/form_modo_preparo/receita_form_modo_preparo_page.dart';
 import 'package:receitas/app/modules/receita/widget/receita_dots.dart';
 import 'package:receitas/app/shareds/utils/validator/validator.dart';
+import 'package:receitas/app/shareds/widgets/dialog_custom.dart';
 import 'package:receitas/app/shareds/widgets/text_form_field_custom.dart';
 import 'receita_form_controller.dart';
 
@@ -42,7 +43,7 @@ class _ReceitaFormPageState
       elevation: 0.0,
       actions: <Widget>[
         IconButton(
-          onPressed: _formController.save,
+          onPressed: onPressedSaveReceita,
           icon: Icon(Icons.save),
         ),
       ],
@@ -87,6 +88,21 @@ class _ReceitaFormPageState
         ],
       ),
     );
+  }
+
+  void onPressedSaveReceita() {
+    DialogCustom.showProgress(context);
+    _formController.save().then((response) {
+      Navigator.pop(context);
+//      Modular.to.pop();
+    }).catchError((error) {
+      Navigator.pop(context);
+      DialogCustom.showAlertDialogUtil(
+        context,
+        "Atenção",
+        error,
+      );
+    });
   }
 
   void onPageChangedPageView(index) {
