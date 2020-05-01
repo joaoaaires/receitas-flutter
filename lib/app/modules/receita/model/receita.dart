@@ -6,4 +6,9 @@ class Receita {
     this.id,
     this.titulo,
   });
+
+  Receita.fromMap(Map<String, dynamic> map) {
+    id = map["id"];
+    titulo = map["titulo"];
+  }
 }

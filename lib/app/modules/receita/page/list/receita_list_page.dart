@@ -1,5 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:receitas/app/modules/receita/model/receita.dart';
+import 'package:receitas/app/modules/receita/page/list/receita_list_controller.dart';
 
 class ReceitaListPage extends StatefulWidget {
   final String title;
@@ -11,6 +15,14 @@ class ReceitaListPage extends StatefulWidget {
 }
 
 class _ReceitaListPageState extends State<ReceitaListPage> {
+  ReceitaListController _receitaListController;
+
+  @override
+  void initState() {
+    super.initState();
+    _receitaListController = Modular.get<ReceitaListController>();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,13 +50,35 @@ class _ReceitaListPageState extends State<ReceitaListPage> {
   }
 
   Widget getBody() {
-    return ListView(
-      physics: BouncingScrollPhysics(),
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      children: <Widget>[
-        getButtonNovaReceita(),
-        getItemReceita(),
-      ],
+    return Observer(
+      builder: (_) {
+        if (_receitaListController.receitas.error != null) {
+          return Center(
+            child: Text("Não foi possível carregar receitas!"),
+          );
+        }
+
+        if (_receitaListController.receitas.value == null) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+
+        List<Receita> receitas = _receitaListController.receitas.value;
+        int size = receitas.length + (receitas.isEmpty ? 2 : 1);
+
+        return ListView.builder(
+          physics: BouncingScrollPhysics(),
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          itemCount: size,
+          itemBuilder: (_, index) {
+            if (index == 0) return getButtonNovaReceita();
+            if (index == 1 && size == 2) return getItemMensagemInfo();
+
+            return getItemReceita(receitas[index - 1]);
+          },
+        );
+      },
     );
   }
 
@@ -119,7 +153,8 @@ class _ReceitaListPageState extends State<ReceitaListPage> {
     );
   }
 
-  Widget getItemReceita() {
+  Widget getItemReceita(Receita receita) {
+    String sigla = receita.titulo.substring(0,1);
     BorderRadius borderRadius = BorderRadius.circular(4.0);
 
     return Padding(
@@ -132,9 +167,39 @@ class _ReceitaListPageState extends State<ReceitaListPage> {
           onTap: () {},
           borderRadius: borderRadius,
           child: ListTile(
-            title: Text("Bolo"),
-            subtitle: Text("Bolo Dois"),
-            leading: CircleAvatar(),
+            title: Text(receita.titulo),
+            subtitle: Text("Receita"),
+            leading: CircleAvatar(
+              child: Text(sigla),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget getItemMensagemInfo() {
+    BorderRadius borderRadius = BorderRadius.circular(4.0);
+
+    return Padding(
+      padding: EdgeInsets.only(top: 8.0),
+      child: Material(
+        elevation: 3.0,
+        color: Colors.white,
+        borderRadius: borderRadius,
+        child: InkWell(
+          onTap: () {},
+          borderRadius: borderRadius,
+          child: ListTile(
+            title: Center(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: Text(
+                  "Você ainda não possui receitas cadastradas. Clique no botão acima para criar uma nova receita.",
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
           ),
         ),
       ),

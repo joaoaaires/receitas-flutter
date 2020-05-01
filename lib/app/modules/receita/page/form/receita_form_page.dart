@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:receitas/app/modules/receita/page/form/form_ingrediente/receita_form_ingrediente_page.dart';
 import 'package:receitas/app/modules/receita/page/form/form_modo_preparo/receita_form_modo_preparo_page.dart';
+import 'package:receitas/app/modules/receita/page/list/receita_list_controller.dart';
 import 'package:receitas/app/modules/receita/widget/receita_dots.dart';
 import 'package:receitas/app/shareds/utils/validator/validator.dart';
 import 'package:receitas/app/shareds/widgets/dialog_custom.dart';
@@ -93,8 +94,11 @@ class _ReceitaFormPageState
   void onPressedSaveReceita() {
     DialogCustom.showProgress(context);
     _formController.save().then((response) {
+      ReceitaListController receitaListController = Modular.get<ReceitaListController>();
+      receitaListController.update();
+
       Navigator.pop(context);
-//      Modular.to.pop();
+      Modular.to.pop();
     }).catchError((error) {
       Navigator.pop(context);
       DialogCustom.showAlertDialogUtil(

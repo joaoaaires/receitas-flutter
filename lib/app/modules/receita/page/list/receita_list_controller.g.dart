@@ -9,40 +9,26 @@ part of 'receita_list_controller.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$ReceitaListController on _ReceitaListControllerBase, Store {
-  final _$valueAtom = Atom(name: '_ReceitaListControllerBase.value');
+  final _$receitasAtom = Atom(name: '_ReceitaListControllerBase.receitas');
 
   @override
-  int get value {
-    _$valueAtom.context.enforceReadPolicy(_$valueAtom);
-    _$valueAtom.reportObserved();
-    return super.value;
+  ObservableFuture<dynamic> get receitas {
+    _$receitasAtom.context.enforceReadPolicy(_$receitasAtom);
+    _$receitasAtom.reportObserved();
+    return super.receitas;
   }
 
   @override
-  set value(int value) {
-    _$valueAtom.context.conditionallyRunInAction(() {
-      super.value = value;
-      _$valueAtom.reportChanged();
-    }, _$valueAtom, name: '${_$valueAtom.name}_set');
-  }
-
-  final _$_ReceitaListControllerBaseActionController =
-      ActionController(name: '_ReceitaListControllerBase');
-
-  @override
-  void increment() {
-    final _$actionInfo =
-        _$_ReceitaListControllerBaseActionController.startAction();
-    try {
-      return super.increment();
-    } finally {
-      _$_ReceitaListControllerBaseActionController.endAction(_$actionInfo);
-    }
+  set receitas(ObservableFuture<dynamic> value) {
+    _$receitasAtom.context.conditionallyRunInAction(() {
+      super.receitas = value;
+      _$receitasAtom.reportChanged();
+    }, _$receitasAtom, name: '${_$receitasAtom.name}_set');
   }
 
   @override
   String toString() {
-    final string = 'value: ${value.toString()}';
+    final string = 'receitas: ${receitas.toString()}';
     return '{$string}';
   }
 }
