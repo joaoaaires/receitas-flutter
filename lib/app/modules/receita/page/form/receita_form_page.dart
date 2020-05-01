@@ -21,13 +21,6 @@ class ReceitaFormPage extends StatefulWidget {
 
 class _ReceitaFormPageState
     extends ModularState<ReceitaFormPage, ReceitaFormController> {
-  ReceitaFormController _formController;
-
-  @override
-  void initState() {
-    super.initState();
-    this._formController = Modular.get<ReceitaFormController>();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,19 +53,19 @@ class _ReceitaFormPageState
       child: Column(
         children: <Widget>[
           Form(
-            key: _formController.formKey,
+            key: controller.formKey,
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: padding),
               child: TextFormFieldCustom(
                 labelText: "Título",
-                initialValue: _formController.receita.titulo,
-                onSaved: (value) => _formController.receita.titulo = value,
+                initialValue: controller.receita.titulo,
+                onSaved: (value) => controller.receita.titulo = value,
                 validators: [Validator.required()],
               ),
             ),
           ),
           ReceitaDots(
-            currentyIndex: _formController.currentyIndex,
+            currentyIndex: controller.currentyIndex,
             sizePage: 2,
           ),
           Expanded(
@@ -93,7 +86,7 @@ class _ReceitaFormPageState
 
   void onPressedSaveReceita() {
     DialogCustom.showProgress(context);
-    _formController.save().then((response) {
+    controller.save().then((response) {
       ReceitaListController receitaListController = Modular.get<ReceitaListController>();
       receitaListController.update();
 
@@ -112,7 +105,7 @@ class _ReceitaFormPageState
   void onPageChangedPageView(index) {
     FocusScope.of(context).requestFocus(new FocusNode());
     setState(() {
-      _formController.currentyIndex = index;
+      controller.currentyIndex = index;
     });
   }
 }

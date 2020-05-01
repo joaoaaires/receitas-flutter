@@ -154,7 +154,7 @@ class _ReceitaListPageState extends State<ReceitaListPage> {
   }
 
   Widget getItemReceita(Receita receita) {
-    String sigla = receita.titulo.substring(0,1);
+    String sigla = receita.titulo.substring(0, 1);
     BorderRadius borderRadius = BorderRadius.circular(4.0);
 
     return Padding(
@@ -164,7 +164,7 @@ class _ReceitaListPageState extends State<ReceitaListPage> {
         color: Colors.white,
         borderRadius: borderRadius,
         child: InkWell(
-          onTap: () {},
+          onTap: () => onTapItemReceita(receita),
           borderRadius: borderRadius,
           child: ListTile(
             title: Text(receita.titulo),
@@ -188,7 +188,6 @@ class _ReceitaListPageState extends State<ReceitaListPage> {
         color: Colors.white,
         borderRadius: borderRadius,
         child: InkWell(
-          onTap: () {},
           borderRadius: borderRadius,
           child: ListTile(
             title: Center(
@@ -203,6 +202,13 @@ class _ReceitaListPageState extends State<ReceitaListPage> {
           ),
         ),
       ),
+    );
+  }
+
+  void onTapItemReceita(Receita receita) {
+    Modular.to.pushNamed(
+      "/receita/checklist",
+      arguments: receita,
     );
   }
 }
