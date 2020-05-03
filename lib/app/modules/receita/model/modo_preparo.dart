@@ -8,4 +8,10 @@ class ModoPreparo {
     this.idreceita,
     this.descricao,
   });
+
+  ModoPreparo.fromMap(Map<String, dynamic> map) {
+    id = map["id"];
+    idreceita = map["idreceita"];
+    descricao = map["descricao"];
+  }
 }

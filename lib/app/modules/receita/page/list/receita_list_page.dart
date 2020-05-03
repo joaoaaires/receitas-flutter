@@ -65,7 +65,11 @@ class _ReceitaListPageState extends State<ReceitaListPage> {
         }
 
         List<Receita> receitas = _receitaListController.receitas.value;
-        int size = receitas.length + (receitas.isEmpty ? 2 : 1);
+
+        int size = receitas.length + 1;
+        bool isEmpty = receitas.isEmpty;
+
+        if (isEmpty) size + 1;
 
         return ListView.builder(
           physics: BouncingScrollPhysics(),
@@ -73,7 +77,7 @@ class _ReceitaListPageState extends State<ReceitaListPage> {
           itemCount: size,
           itemBuilder: (_, index) {
             if (index == 0) return getButtonNovaReceita();
-            if (index == 1 && size == 2) return getItemMensagemInfo();
+            if (index == 1 && isEmpty) return getItemMensagemInfo();
 
             return getItemReceita(receitas[index - 1]);
           },

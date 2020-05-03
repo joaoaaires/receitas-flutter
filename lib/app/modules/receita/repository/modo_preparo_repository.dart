@@ -7,21 +7,52 @@ class ModoPreparoRepository {
 
   ModoPreparoRepository(this._helper);
 
-  Future<ModoPreparo> create(ModoPreparo modoPreparo) async {
+  Future<int> create(ModoPreparo modoPreparo) async {
     try {
       Database db = await this._helper.database;
-      modoPreparo.id = await db.rawInsert(
+      int id = await db.rawInsert(
         "INSERT INTO modopreparo (idreceita, descricao) VALUES (?, ?);",
         [
           modoPreparo.idreceita,
           modoPreparo.descricao,
         ],
       );
-      return modoPreparo;
+      return id;
     } catch (e) {
       print(e);
       throw "Não é possível criar modo de preparo.";
     }
   }
 
+  Future<List<ModoPreparo>> readByIdReceita(int idreceita) async {
+    try {
+      List<ModoPreparo> modosPreparo = [];
+      Database db = await this._helper.database;
+      List<Map> result = await db.rawQuery(
+          "SELECT id, idreceita, descricao FROM modopreparo WHERE idreceita = ?;",
+          [idreceita]);
+      result.forEach((map) {
+        modosPreparo.add(ModoPreparo.fromMap(map));
+      });
+      return modosPreparo;
+    } catch (e) {
+      print(e);
+      throw "Não é possível buscar modos de preparo.";
+    }
+  }
+
+  //update
+
+  Future<Null> delete(int id) async {
+    try {
+      Database db = await this._helper.database;
+      await db.rawInsert(
+        "DELETE FROM modopreparo WHERE id = ?",
+        [id],
+      );
+    } catch (e) {
+      print(e);
+      throw "Não é possível buscar ingredientes.";
+    }
+  }
 }

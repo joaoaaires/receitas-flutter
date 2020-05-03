@@ -7,16 +7,16 @@ class ReceitaRepository {
 
   ReceitaRepository(this._helper);
 
-  Future<Receita> create(Receita receita) async {
+  Future<int> create(Receita receita) async {
     try {
       Database db = await this._helper.database;
-      receita.id = await db.rawInsert(
+      int id = await db.rawInsert(
         "INSERT INTO receita (titulo) VALUES (?);",
         [
           receita.titulo,
         ],
       );
-      return receita;
+      return id;
     } catch (e) {
       print(e);
       throw "Não foi possível criar receita.";
@@ -33,11 +33,29 @@ class ReceitaRepository {
       result.forEach((map) {
         receitas.add(Receita.fromMap(map));
       });
-      print(receitas.length);
       return receitas;
     } catch (e) {
       print(e);
       throw "Não foi possível recuperar receitas";
     }
   }
+
+  Future<int> update(Receita receita) async {
+    try {
+      Database db = await this._helper.database;
+      int count = await db.rawInsert(
+        "UPDATE receita SET titulo = ? WHERE id = ?;",
+        [
+          receita.titulo,
+          receita.id,
+        ],
+      );
+      print("count: $count");
+      return receita.id;
+    } catch (e) {
+      print(e);
+      throw "Não foi possível criar receita.";
+    }
+  }
+
 }

@@ -7,21 +7,52 @@ class IngredienteRepository {
 
   IngredienteRepository(this._helper);
 
-  Future<Ingrediente> create(Ingrediente ingrediente) async {
+  Future<int> create(Ingrediente ingrediente) async {
     try {
       Database db = await this._helper.database;
-      ingrediente.id = await db.rawInsert(
+      int id = await db.rawInsert(
         "INSERT INTO ingrediente (idreceita, descricao) VALUES (?, ?);",
         [
           ingrediente.idreceita,
           ingrediente.descricao,
         ],
       );
-      return ingrediente;
+      return id;
     } catch (e) {
       print(e);
       throw "Não é possível criar ingrediente.";
     }
   }
 
+  Future<List<Ingrediente>> readByIdReceita(int idreceita) async {
+    try {
+      List<Ingrediente> ingredientes = [];
+      Database db = await this._helper.database;
+      List<Map> result = await db.rawQuery(
+          "SELECT id, idreceita, descricao FROM ingrediente WHERE idreceita = ?;",
+          [idreceita]);
+      result.forEach((map) {
+        ingredientes.add(Ingrediente.fromMap(map));
+      });
+      return ingredientes;
+    } catch (e) {
+      print(e);
+      throw "Não é possível buscar ingredientes.";
+    }
+  }
+
+  //update
+
+  Future<Null> delete(int id) async {
+    try {
+      Database db = await this._helper.database;
+      await db.rawInsert(
+        "DELETE FROM ingrediente WHERE id = ?",
+        [id],
+      );
+    } catch (e) {
+      print(e);
+      throw "Não é possível buscar ingredientes.";
+    }
+  }
 }

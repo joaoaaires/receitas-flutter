@@ -54,6 +54,8 @@ class _ReceitaFormModoPreparoPageState
           Form(
             key: _formKey,
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Expanded(
                   child: TextFormFieldCustom(
@@ -119,7 +121,7 @@ class _ReceitaFormModoPreparoPageState
           ),
           title: Text(modoPreparo.descricao),
           trailing: IconButton(
-//            onPressed: () => _formController.delModoPreparo(index),
+            onPressed: () => onPressedRemoveModoPreparo(modoPreparo),
             icon: Icon(
               Icons.delete,
               color: Colors.red,
@@ -145,4 +147,10 @@ class _ReceitaFormModoPreparoPageState
       );
     }
   }
+
+  void onPressedRemoveModoPreparo(ModoPreparo modoPreparo) {
+    FocusScope.of(context).requestFocus(new FocusNode());
+    _formController.delModoPreparo(modoPreparo);
+  }
+
 }
