@@ -1,5 +1,4 @@
 import 'package:mobx/mobx.dart';
-import 'package:receitas/app/modules/receita/model/receita.dart';
 import 'package:receitas/app/modules/receita/repository/receita_repository.dart';
 
 part 'receita_list_controller.g.dart';

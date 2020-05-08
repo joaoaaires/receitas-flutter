@@ -13,7 +13,7 @@ class TextFormFieldCustom extends StatelessWidget {
   List<String Function(dynamic)> validators;
 
   TextFormFieldCustom({
-    @required this.labelText,
+    this.labelText,
     this.hintText,
     this.initialValue,
     this.onSaved,

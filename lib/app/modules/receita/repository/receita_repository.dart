@@ -43,15 +43,14 @@ class ReceitaRepository {
   Future<int> update(Receita receita) async {
     try {
       Database db = await this._helper.database;
-      int count = await db.rawInsert(
+      await db.rawInsert(
         "UPDATE receita SET titulo = ? WHERE id = ?;",
         [
           receita.titulo,
           receita.id,
         ],
       );
-      print("count: $count");
-      return receita.id;
+       return receita.id;
     } catch (e) {
       print(e);
       throw "Não foi possível criar receita.";

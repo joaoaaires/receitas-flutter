@@ -69,7 +69,7 @@ class _ReceitaListPageState extends State<ReceitaListPage> {
         int size = receitas.length + 1;
         bool isEmpty = receitas.isEmpty;
 
-        if (isEmpty) size + 1;
+        if (isEmpty) size = size + 1;
 
         return ListView.builder(
           physics: BouncingScrollPhysics(),
