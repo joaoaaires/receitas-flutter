@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:receitas/app/modules/receita/model/receita.dart';
+import 'package:receitas/app/shareds/widgets/buttom_custom.dart';
 import 'receita_checklist_controller.dart';
 
 class ReceitaChecklistPage extends StatefulWidget {
@@ -28,9 +29,7 @@ class _ReceitaChecklistPageState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: getAppBar(),
-      body: Column(
-        children: <Widget>[],
-      ),
+      body: getBody(),
     );
   }
 
@@ -55,6 +54,68 @@ class _ReceitaChecklistPageState
     );
   }
 
+  Widget getBody() {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 16.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          getTitleReceita(),
+          getChecklistReceita(),
+          getButtonFinalizarReceita(),
+        ],
+      ),
+    );
+  }
+
+  Widget getTitleReceita() {
+    return Text(
+      controller.receita.titulo,
+      style: TextStyle(
+        fontSize: 28.0,
+      ),
+    );
+  }
+
+  Widget getChecklistReceita() {
+    return Expanded(
+      child: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            getChecklistSubtitleReceita("Ingredientes"),
+            getChecklistSubtitleReceita("Modo de Preparo"),
+          ],
+        ),
+      ),
+      // child: ListView(
+      //   physics: BouncingScrollPhysics(),
+      //   children: <Widget>[
+
+      //   ],
+      // ),
+    );
+  }
+
+  Widget getChecklistSubtitleReceita(String text) {
+    return Text(
+      text,
+      style: TextStyle(fontWeight: FontWeight.bold),
+    );
+  }
+
+  Widget getButtonFinalizarReceita() {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 16.0),
+      child: ButtomCustom(
+        text: "Finalizar Receita",
+        colorText: Colors.white,
+        colorButtom: Colors.red,
+        onTap: () {},
+      ),
+    );
+  }
+
   void onSelectedAcaoReceita(String value) {
     if (value != null && value == "editar") {
       onPressEditReceita();
@@ -67,5 +128,4 @@ class _ReceitaChecklistPageState
       arguments: controller.receita,
     );
   }
-
 }

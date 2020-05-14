@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
 class ButtomCustom extends StatelessWidget {
+  final String text;
   final double width;
   final double heigth;
+  final Color colorText;
   final Color colorButtom;
   final Color colorIcon;
   final IconData icon;
@@ -11,6 +13,8 @@ class ButtomCustom extends StatelessWidget {
 
   ButtomCustom({
     Key key,
+    this.text,
+    this.colorText,
     this.width,
     this.heigth: 58.0,
     this.colorButtom,
@@ -33,13 +37,33 @@ class ButtomCustom extends StatelessWidget {
           height: heigth,
           width: width,
           alignment: Alignment.center,
-          child: Icon(
-            icon,
-            color: colorIcon,
-            size: 24,
-          ),
+          child: getChildButtom(),
+          // child: Icon(
+          //   icon,
+          //   color: colorIcon,
+          //   size: 24,
+          // ),
         ),
       ),
     );
+  }
+
+  Widget getChildButtom() {
+    if (text != null) {
+      return Text(
+        text,
+        style: TextStyle(color: colorText),
+      );
+    }
+
+    if (icon != null) {
+      return Icon(
+        icon,
+        color: colorIcon,
+        size: 24,
+      );
+    }
+
+    return Container();
   }
 }
