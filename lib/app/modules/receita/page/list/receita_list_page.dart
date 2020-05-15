@@ -199,10 +199,7 @@ class _ReceitaListPageState extends State<ReceitaListPage> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: Text(
-                  '''
-                  Você ainda não possui receitas cadastradas.
-                  Clique no botão acima para criar uma nova receita.
-                  ''',
+                  '''Você ainda não possui receitas cadastradas. Clique no botão acima para criar uma nova receita.''',
                   textAlign: TextAlign.center,
                 ),
               ),
