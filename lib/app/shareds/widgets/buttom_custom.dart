@@ -16,7 +16,7 @@ class ButtomCustom extends StatelessWidget {
     this.text,
     this.colorText,
     this.width,
-    this.heigth: 58.0,
+    this.heigth = 58.0,
     this.colorButtom,
     this.colorIcon,
     this.icon,

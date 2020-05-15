@@ -1,6 +1,5 @@
-import 'package:receitas/app/modules/receita/model/ingrediente.dart';
-import 'package:receitas/app/shareds/utils/database_helper.dart';
-import 'package:sqflite/sqflite.dart';
+import '../../../shareds/utils/database_helper.dart';
+import '../model/ingrediente.dart';
 
 class IngredienteRepository {
   final DatabaseHelper _helper;
@@ -9,8 +8,8 @@ class IngredienteRepository {
 
   Future<int> create(Ingrediente ingrediente) async {
     try {
-      Database db = await this._helper.database;
-      int id = await db.rawInsert(
+      var db = await _helper.database;
+      var id = await db.rawInsert(
         "INSERT INTO ingrediente (idreceita, descricao) VALUES (?, ?);",
         [
           ingrediente.idreceita,
@@ -18,7 +17,7 @@ class IngredienteRepository {
         ],
       );
       return id;
-    } catch (e) {
+    } on Exception catch (e) {
       print(e);
       throw "Não é possível criar ingrediente.";
     }
@@ -26,16 +25,16 @@ class IngredienteRepository {
 
   Future<List<Ingrediente>> readByIdReceita(int idreceita) async {
     try {
-      List<Ingrediente> ingredientes = [];
-      Database db = await this._helper.database;
-      List<Map> result = await db.rawQuery(
-          "SELECT id, idreceita, descricao FROM ingrediente WHERE idreceita = ?;",
-          [idreceita]);
-      result.forEach((map) {
+      var db = await _helper.database;
+      var ingredientes = <Ingrediente>[];
+      List<Map> result = await db.rawQuery('''
+          SELECT id, idreceita, descricao FROM ingrediente WHERE idreceita = ?;
+          ''', [idreceita]);
+      for (var map in result) {
         ingredientes.add(Ingrediente.fromMap(map));
-      });
+      }
       return ingredientes;
-    } catch (e) {
+    } on Exception catch (e) {
       print(e);
       throw "Não é possível buscar ingredientes.";
     }
@@ -45,12 +44,12 @@ class IngredienteRepository {
 
   Future<Null> delete(int id) async {
     try {
-      Database db = await this._helper.database;
+      var db = await _helper.database;
       await db.rawInsert(
         "DELETE FROM ingrediente WHERE id = ?",
         [id],
       );
-    } catch (e) {
+    } on Exception catch (e) {
       print(e);
       throw "Não é possível buscar ingredientes.";
     }

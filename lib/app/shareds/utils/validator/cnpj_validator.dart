@@ -1,8 +1,7 @@
-
-import 'package:receitas/app/shareds/utils/formatter/formatter.dart';
+import '../formatter/formatter.dart';
 
 class CnpjValidator {
-  static const List<String> BLACKLIST = [
+  static const List<String> validatorBlacklist = [
     "00000000000000",
     "11111111111111",
     "22222222222222",
@@ -18,24 +17,23 @@ class CnpjValidator {
   // Compute the Verifier Digit (or "Dígito Verificador (DV)" in PT-BR).
   // You can learn more about the algorithm on [wikipedia (pt-br)](https://pt.wikipedia.org/wiki/D%C3%ADgito_verificador)
   static int _verifierDigit(String cnpj) {
-    int index = 2;
+    var index = 2;
 
-    List<int> reverse =
-    cnpj.split("").map((s) => int.parse(s)).toList().reversed.toList();
+    var reverse = cnpj.split("").map(int.parse).toList().reversed.toList();
 
-    int sum = 0;
+    var sum = 0;
 
-    reverse.forEach((number) {
+    for (var number in reverse) {
       sum += number * index;
       index = (index == 9 ? 2 : index + 1);
-    });
+    }
 
-    int mod = sum % 11;
+    var mod = sum % 11;
 
     return (mod < 2 ? 0 : 11 - mod);
   }
 
-  static bool isValid(String cnpj, [stripBeforeValidation = true]) {
+  static bool isValid(String cnpj, {bool stripBeforeValidation = true}) {
     if (stripBeforeValidation) {
       cnpj = Formatter.strip(cnpj);
     }
@@ -51,16 +49,15 @@ class CnpjValidator {
     }
 
     // cnpj can't be blacklisted
-    if (BLACKLIST.indexOf(cnpj) != -1) {
+    if (validatorBlacklist.indexOf(cnpj) != -1) {
       return false;
     }
 
-    String numbers = cnpj.substring(0, 12);
+    var numbers = cnpj.substring(0, 12);
     numbers += _verifierDigit(numbers).toString();
     numbers += _verifierDigit(numbers).toString();
 
     return numbers.substring(numbers.length - 2) ==
         cnpj.substring(cnpj.length - 2);
   }
-
 }

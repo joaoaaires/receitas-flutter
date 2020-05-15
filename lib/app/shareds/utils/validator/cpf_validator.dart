@@ -1,8 +1,7 @@
-
-import 'package:receitas/app/shareds/utils/formatter/formatter.dart';
+import '../formatter/formatter.dart';
 
 class CpfValidator {
-  static const List<String> BLACKLIST = [
+  static const List<String> validatorBlacklist = [
     "00000000000",
     "11111111111",
     "22222222222",
@@ -19,23 +18,23 @@ class CpfValidator {
   // Compute the Verifier Digit (or "Dígito Verificador (DV)" in PT-BR).
   // You can learn more about the algorithm on [wikipedia (pt-br)](https://pt.wikipedia.org/wiki/D%C3%ADgito_verificador)
   static int _verifierDigit(String cpf) {
-    List<int> numbers =
-    cpf.split("").map((number) => int.parse(number, radix: 10)).toList();
+    var numbers =
+        cpf.split("").map((number) => int.parse(number, radix: 10)).toList();
 
-    int modulus = numbers.length + 1;
+    var modulus = numbers.length + 1;
 
-    List<int> multiplied = [];
+    var multiplied = <int>[];
 
     for (var i = 0; i < numbers.length; i++) {
       multiplied.add(numbers[i] * (modulus - i));
     }
 
-    int mod = multiplied.reduce((buffer, number) => buffer + number) % 11;
+    var mod = multiplied.reduce((buffer, number) => buffer + number) % 11;
 
     return (mod < 2 ? 0 : 11 - mod);
   }
 
-  static bool isValid(String cpf, [stripBeforeValidation = true]) {
+  static bool isValid(String cpf, {bool stripBeforeValidation = true}) {
     if (stripBeforeValidation) {
       cpf = Formatter.strip(cpf);
     }
@@ -51,11 +50,11 @@ class CpfValidator {
     }
 
     // CPF can't be blacklisted
-    if (BLACKLIST.indexOf(cpf) != -1) {
+    if (validatorBlacklist.indexOf(cpf) != -1) {
       return false;
     }
 
-    String numbers = cpf.substring(0, 9);
+    var numbers = cpf.substring(0, 9);
     numbers += _verifierDigit(numbers).toString();
     numbers += _verifierDigit(numbers).toString();
 

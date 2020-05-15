@@ -2,24 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class TextFormFieldCustom extends StatelessWidget {
-  String hintText;
-  String labelText;
-  String initialValue;
-  Function(String) onSaved;
-  bool enableInteractiveSelection;
-  TextInputType keyboardType;
-  TextEditingController controller;
-  List<TextInputFormatter> inputFormatters;
-  List<String Function(dynamic)> validators;
+  final String hintText;
+  final String labelText;
+  final String initialValue;
+  final Function(String) onSaved;
+  final bool enableInteractiveSelection;
+  final TextInputType keyboardType;
+  final TextEditingController controller;
+  final List<TextInputFormatter> inputFormatters;
+  final List<String Function(dynamic)> validators;
 
   TextFormFieldCustom({
     this.labelText,
     this.hintText,
     this.initialValue,
     this.onSaved,
-    this.enableInteractiveSelection: true,
-    this.keyboardType: TextInputType.text,
-    this.inputFormatters: const <TextInputFormatter>[],
+    this.enableInteractiveSelection = true,
+    this.keyboardType = TextInputType.text,
+    this.inputFormatters = const <TextInputFormatter>[],
     this.validators,
     this.controller,
   });
@@ -45,9 +45,10 @@ class TextFormFieldCustom extends StatelessWidget {
           if (validators == null) return null;
           if (validators.length == 0) return null;
 
-          for (int i = 0; i < validators.length; i++) {
-            if (validators[i] != null && validators[i](value) != null)
+          for (var i = 0; i < validators.length; i++) {
+            if (validators[i] != null && validators[i](value) != null) {
               return validators[i](value);
+            }
           }
 
           return null;

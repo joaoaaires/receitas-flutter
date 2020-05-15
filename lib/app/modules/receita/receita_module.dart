@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:receitas/app/modules/receita/page/checklist/receita_checklist_module.dart';
-import 'package:receitas/app/modules/receita/page/form/receita_form_module.dart';
+
+import 'page/checklist/receita_checklist_module.dart';
+import 'page/form/receita_form_module.dart';
 
 class ReceitaModule extends ChildModule {
   @override

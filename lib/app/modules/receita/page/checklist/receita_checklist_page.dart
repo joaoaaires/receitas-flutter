@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:receitas/app/modules/receita/model/receita.dart';
-import 'package:receitas/app/shareds/widgets/buttom_custom.dart';
+
+import '../../../../shareds/widgets/buttom_custom.dart';
+import '../../model/receita.dart';
 import 'receita_checklist_controller.dart';
 
 class ReceitaChecklistPage extends StatefulWidget {

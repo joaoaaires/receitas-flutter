@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:receitas/app/modules/receita/model/modo_preparo.dart';
-import 'package:receitas/app/modules/receita/page/form/receita_form_controller.dart';
-import 'package:receitas/app/shareds/utils/validator/validator.dart';
-import 'package:receitas/app/shareds/widgets/buttom_custom.dart';
-import 'package:receitas/app/shareds/widgets/text_form_field_custom.dart';
+
+import '../../../../../shareds/utils/validator/validator.dart';
+import '../../../../../shareds/widgets/buttom_custom.dart';
+import '../../../../../shareds/widgets/text_form_field_custom.dart';
+import '../../../model/modo_preparo.dart';
+import '../receita_form_controller.dart';
 
 class ReceitaFormModoPreparoPage extends StatefulWidget {
   final String title;
@@ -79,7 +80,7 @@ class _ReceitaFormModoPreparoPageState
           Expanded(
             child: Observer(
               builder: (_) {
-                List<ModoPreparo> modosPreparo =
+                var modosPreparo =
                     _formController.modosPreparo.reversed.toList();
                 return ListView.builder(
                   physics: BouncingScrollPhysics(),
@@ -101,7 +102,7 @@ class _ReceitaFormModoPreparoPageState
   }
 
   Widget getItemModoPreparo(int index, ModoPreparo modoPreparo, int size) {
-    BorderRadius borderRadius = BorderRadius.circular(5.0);
+    var borderRadius = BorderRadius.circular(5.0);
 
     return Padding(
       padding: const EdgeInsets.only(top: 8.0),
@@ -136,7 +137,7 @@ class _ReceitaFormModoPreparoPageState
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
 
-      FocusScope.of(context).requestFocus(new FocusNode());
+      FocusScope.of(context).requestFocus(FocusNode());
 
       _formController.addModoPreparo(ModoPreparo(
         descricao: _editingController.text,
@@ -149,7 +150,7 @@ class _ReceitaFormModoPreparoPageState
   }
 
   void onPressedRemoveModoPreparo(ModoPreparo modoPreparo) {
-    FocusScope.of(context).requestFocus(new FocusNode());
+    FocusScope.of(context).requestFocus(FocusNode());
     _formController.delModoPreparo(modoPreparo);
   }
 

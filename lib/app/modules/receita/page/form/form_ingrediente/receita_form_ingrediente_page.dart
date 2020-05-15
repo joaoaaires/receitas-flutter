@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:receitas/app/modules/receita/model/ingrediente.dart';
-import 'package:receitas/app/modules/receita/page/form/receita_form_controller.dart';
-import 'package:receitas/app/shareds/utils/validator/validator.dart';
-import 'package:receitas/app/shareds/widgets/buttom_custom.dart';
-import 'package:receitas/app/shareds/widgets/text_form_field_custom.dart';
+
+import '../../../../../shareds/utils/validator/validator.dart';
+import '../../../../../shareds/widgets/buttom_custom.dart';
+import '../../../../../shareds/widgets/text_form_field_custom.dart';
+import '../../../model/ingrediente.dart';
+import '../receita_form_controller.dart';
 
 class ReceitaFormIngredientePage extends StatefulWidget {
   final String title;
@@ -96,7 +97,7 @@ class _ReceitaFormIngredientePageState
   }
 
   Widget getItemIngrediente(Ingrediente ingrediente) {
-    BorderRadius borderRadius = BorderRadius.circular(5.0);
+    var borderRadius = BorderRadius.circular(5.0);
 
     return Padding(
       padding: EdgeInsets.only(top: 8.0),
@@ -119,7 +120,7 @@ class _ReceitaFormIngredientePageState
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
 
-      FocusScope.of(context).requestFocus(new FocusNode());
+      FocusScope.of(context).requestFocus(FocusNode());
 
       _formController.addIngrediente(Ingrediente(
         descricao: _editingController.text,
@@ -132,7 +133,7 @@ class _ReceitaFormIngredientePageState
   }
 
   void onPressedRemoveIngrediente(Ingrediente ingrediente) {
-    FocusScope.of(context).requestFocus(new FocusNode());
+    FocusScope.of(context).requestFocus(FocusNode());
     _formController.delIngrediente(ingrediente);
   }
 }

@@ -2,8 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:receitas/app/modules/receita/model/receita.dart';
-import 'package:receitas/app/modules/receita/page/list/receita_list_controller.dart';
+
+import '../../model/receita.dart';
+import 'receita_list_controller.dart';
 
 class ReceitaListPage extends StatefulWidget {
   final String title;
@@ -66,8 +67,8 @@ class _ReceitaListPageState extends State<ReceitaListPage> {
 
         List<Receita> receitas = _receitaListController.receitas.value;
 
-        int size = receitas.length + 1;
-        bool isEmpty = receitas.isEmpty;
+        var size = receitas.length + 1;
+        var isEmpty = receitas.isEmpty;
 
         if (isEmpty) size = size + 1;
 
@@ -87,8 +88,8 @@ class _ReceitaListPageState extends State<ReceitaListPage> {
   }
 
   Widget getButtonNovaReceita() {
-    BorderRadius borderRadius = BorderRadius.circular(4.0);
-    double heightScreen = MediaQuery.of(context).size.height;
+    var borderRadius = BorderRadius.circular(4.0);
+    var heightScreen = MediaQuery.of(context).size.height;
 
     return Material(
       elevation: 3.0,
@@ -158,8 +159,8 @@ class _ReceitaListPageState extends State<ReceitaListPage> {
   }
 
   Widget getItemReceita(Receita receita) {
-    String sigla = receita.titulo.substring(0, 1);
-    BorderRadius borderRadius = BorderRadius.circular(4.0);
+    var sigla = receita.titulo.substring(0, 1);
+    var borderRadius = BorderRadius.circular(4.0);
 
     return Padding(
       padding: EdgeInsets.only(top: 8.0),
@@ -183,7 +184,7 @@ class _ReceitaListPageState extends State<ReceitaListPage> {
   }
 
   Widget getItemMensagemInfo() {
-    BorderRadius borderRadius = BorderRadius.circular(4.0);
+    var borderRadius = BorderRadius.circular(4.0);
 
     return Padding(
       padding: EdgeInsets.only(top: 8.0),
@@ -198,7 +199,10 @@ class _ReceitaListPageState extends State<ReceitaListPage> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: Text(
-                  "Você ainda não possui receitas cadastradas. Clique no botão acima para criar uma nova receita.",
+                  '''
+                  Você ainda não possui receitas cadastradas.
+                  Clique no botão acima para criar uma nova receita.
+                  ''',
                   textAlign: TextAlign.center,
                 ),
               ),

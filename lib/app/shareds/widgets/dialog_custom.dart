@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 
 class DialogCustom {
   /// EXIBE UM DIALOG PARA O USUARIO FICAR ESPERANDO
-  static void showProgress(context, {text : "Aguarde..."}) {
+  static void showProgress(
+    BuildContext context, {
+    String text = "Aguarde...",
+  }) {
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (BuildContext context) {
+      builder: (context) {
         return WillPopScope(
           onWillPop: () async => false,
           child: Dialog(
@@ -28,11 +31,15 @@ class DialogCustom {
   }
 
   /// EXIBE UM DIALOG DE ALERTA PARA USUARIO
-  static void showAlertDialogUtil(BuildContext context, String title, String text) {
+  static void showAlertDialogUtil(
+    BuildContext context,
+    String title,
+    String text,
+  ) async {
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (BuildContext context) {
+      builder: (context) {
         return AlertDialog(
           title: Text(title),
           content: Text(text),

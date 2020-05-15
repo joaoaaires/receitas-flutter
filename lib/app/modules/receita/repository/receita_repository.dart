@@ -1,6 +1,5 @@
-import 'package:receitas/app/modules/receita/model/receita.dart';
-import 'package:receitas/app/shareds/utils/database_helper.dart';
-import 'package:sqflite/sqflite.dart';
+import '../../../shareds/utils/database_helper.dart';
+import '../model/receita.dart';
 
 class ReceitaRepository {
   final DatabaseHelper _helper;
@@ -9,15 +8,15 @@ class ReceitaRepository {
 
   Future<int> create(Receita receita) async {
     try {
-      Database db = await this._helper.database;
-      int id = await db.rawInsert(
+      var db = await _helper.database;
+      var id = await db.rawInsert(
         "INSERT INTO receita (titulo) VALUES (?);",
         [
           receita.titulo,
         ],
       );
       return id;
-    } catch (e) {
+    } on Exception catch (e) {
       print(e);
       throw "Não foi possível criar receita.";
     }
@@ -25,16 +24,16 @@ class ReceitaRepository {
 
   Future<List<Receita>> read() async {
     try {
-      List<Receita> receitas = [];
-      Database db = await this._helper.database;
+      var receitas = <Receita>[];
+      var db = await _helper.database;
       List<Map> result = await db.rawQuery(
         "SELECT id, titulo FROM receita ORDER BY titulo;",
       );
-      result.forEach((map) {
+      for (var map in result) {
         receitas.add(Receita.fromMap(map));
-      });
+      }
       return receitas;
-    } catch (e) {
+    } on Exception catch (e) {
       print(e);
       throw "Não foi possível recuperar receitas";
     }
@@ -42,7 +41,7 @@ class ReceitaRepository {
 
   Future<int> update(Receita receita) async {
     try {
-      Database db = await this._helper.database;
+      var db = await _helper.database;
       await db.rawInsert(
         "UPDATE receita SET titulo = ? WHERE id = ?;",
         [
@@ -50,11 +49,10 @@ class ReceitaRepository {
           receita.id,
         ],
       );
-       return receita.id;
-    } catch (e) {
+      return receita.id;
+    } on Exception catch (e) {
       print(e);
       throw "Não foi possível criar receita.";
     }
   }
-
 }

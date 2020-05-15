@@ -1,7 +1,8 @@
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:receitas/app/modules/splash/splash_controller.dart';
-import 'package:receitas/app/modules/splash/splash_page.dart';
-import 'package:receitas/app/shareds/utils/database_helper.dart';
+
+import '../../shareds/utils/database_helper.dart';
+import 'splash_controller.dart';
+import 'splash_page.dart';
 
 class SplashModule extends ChildModule {
   @override

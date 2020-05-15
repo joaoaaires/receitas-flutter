@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:receitas/app/modules/receita/model/receita.dart';
-import 'package:receitas/app/modules/receita/page/form/form_ingrediente/receita_form_ingrediente_page.dart';
-import 'package:receitas/app/modules/receita/page/form/form_modo_preparo/receita_form_modo_preparo_page.dart';
-import 'package:receitas/app/modules/receita/page/list/receita_list_controller.dart';
-import 'package:receitas/app/modules/receita/widget/receita_dots.dart';
-import 'package:receitas/app/shareds/utils/validator/validator.dart';
-import 'package:receitas/app/shareds/widgets/dialog_custom.dart';
-import 'package:receitas/app/shareds/widgets/text_form_field_custom.dart';
+
+import '../../../../shareds/utils/validator/validator.dart';
+import '../../../../shareds/widgets/dialog_custom.dart';
+import '../../../../shareds/widgets/text_form_field_custom.dart';
+import '../../model/receita.dart';
+import '../../widget/receita_dots.dart';
+import '../list/receita_list_controller.dart';
+import 'form_ingrediente/receita_form_ingrediente_page.dart';
+import 'form_modo_preparo/receita_form_modo_preparo_page.dart';
 import 'receita_form_controller.dart';
 
 class ReceitaFormPage extends StatefulWidget {
@@ -55,7 +56,7 @@ class _ReceitaFormPageState
   }
 
   Widget getBody() {
-    const double padding = 16.0;
+    const padding = 16.0;
 
     return FutureBuilder(
       future: loading(),
@@ -109,8 +110,7 @@ class _ReceitaFormPageState
   void onPressedSaveReceita() {
     DialogCustom.showProgress(context);
     controller.save().then((response) {
-      ReceitaListController receitaListController =
-          Modular.get<ReceitaListController>();
+      var receitaListController = Modular.get<ReceitaListController>();
       receitaListController.update();
 
       Navigator.pop(context);
@@ -125,8 +125,8 @@ class _ReceitaFormPageState
     });
   }
 
-  void onPageChangedPageView(index) {
-    FocusScope.of(context).requestFocus(new FocusNode());
+  Future<void> onPageChangedPageView(int index) async {
+    FocusScope.of(context).requestFocus(FocusNode());
     setState(() {
       controller.currentyIndex = index;
     });

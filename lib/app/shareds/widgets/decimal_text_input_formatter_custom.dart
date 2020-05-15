@@ -26,11 +26,11 @@ class DecimalTextInputFormatterCustom extends TextInputFormatter {
         selection: new TextSelection.collapsed(offset: newText.length));
      */
 
-    double value = double.parse(newValue.text);
+    var value = double.parse(newValue.text);
 
     final formatter = NumberFormat.simpleCurrency(locale: "pt_Br");
 
-    String newText = formatter.format(value / 100);
+    var newText = formatter.format(value / 100);
 
     return newValue.copyWith(
       selection: TextSelection.collapsed(offset: newText.length),

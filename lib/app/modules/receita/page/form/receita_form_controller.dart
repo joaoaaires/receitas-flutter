@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
-import 'package:receitas/app/modules/receita/model/ingrediente.dart';
-import 'package:receitas/app/modules/receita/model/modo_preparo.dart';
-import 'package:receitas/app/modules/receita/model/receita.dart';
-import 'package:receitas/app/modules/receita/repository/ingrediente_repository.dart';
-import 'package:receitas/app/modules/receita/repository/modo_preparo_repository.dart';
-import 'package:receitas/app/modules/receita/repository/receita_repository.dart';
+
+import '../../model/ingrediente.dart';
+import '../../model/modo_preparo.dart';
+import '../../model/receita.dart';
+import '../../repository/ingrediente_repository.dart';
+import '../../repository/modo_preparo_repository.dart';
+import '../../repository/receita_repository.dart';
 
 part 'receita_form_controller.g.dart';
 
@@ -23,7 +24,7 @@ abstract class _ReceitaFormControllerBase with Store {
     this.modoPreparoRepository,
   );
 
-  Receita receita = new Receita();
+  Receita receita = Receita();
   List<Ingrediente> ingredientesDel = <Ingrediente>[];
   List<ModoPreparo> modosPreparoDel = <ModoPreparo>[];
 
@@ -60,16 +61,14 @@ abstract class _ReceitaFormControllerBase with Store {
   Future<Null> load() async {
     //carregar ingredientes e modo de preparo
     if (receita.id != null && receita.id != 0) {
-      List<Ingrediente> ingredientes =
-      await ingredienteRepository.readByIdReceita(
+      var ingredientes = await ingredienteRepository.readByIdReceita(
         receita.id,
       );
       this.ingredientes = ingredientes.asObservable();
     }
 
     if (receita.id != null && receita.id != 0) {
-      List<ModoPreparo> modosPreparo =
-      await modoPreparoRepository.readByIdReceita(
+      var modosPreparo = await modoPreparoRepository.readByIdReceita(
         receita.id,
       );
       this.modosPreparo = modosPreparo.asObservable();
@@ -77,14 +76,17 @@ abstract class _ReceitaFormControllerBase with Store {
   }
 
   Future<Null> save() async {
-    if (!formKey.currentState.validate())
+    if (!formKey.currentState.validate()) {
       throw "Alguns campos são obrigatórios.";
+    }
 
-    if (ingredientes.isEmpty)
+    if (ingredientes.isEmpty) {
       throw "Por favor insira pelo menos um ingrediente.";
+    }
 
-    if (modosPreparo.isEmpty)
+    if (modosPreparo.isEmpty) {
       throw "Por favor insira pelo menos um modo de preparo.";
+    }
 
     formKey.currentState.save();
 
@@ -98,58 +100,58 @@ abstract class _ReceitaFormControllerBase with Store {
 
     if (receita.id == 0) return;
 
-    ingredientes.forEach((Ingrediente ingrediente) async {
+    for (var ingrediente in ingredientes) {
       if (ingrediente.id == null || ingrediente.id == 0) {
         try {
           ingrediente.idreceita = receita.id;
-          int id = await ingredienteRepository.create(
+          var id = await ingredienteRepository.create(
             ingrediente,
           );
           print("ingrediente cadastrada! id: $id");
-        } catch (e) {
+        } on Exception catch (e) {
           print(e);
         }
       }
-    });
+    }
 
-    modosPreparo.forEach((ModoPreparo modoPreparo) async {
+    for (var modoPreparo in modosPreparo) {
       if (modoPreparo.id == null || modoPreparo.id == 0) {
         try {
           modoPreparo.idreceita = receita.id;
-          int id = await modoPreparoRepository.create(
+          var id = await modoPreparoRepository.create(
             modoPreparo,
           );
           print("modo de preparo cadastrada! id: $id");
-        } catch (e) {
+        } on Exception catch (e) {
           print(e);
         }
       }
-    });
+    }
 
-    ingredientesDel.forEach((Ingrediente ingrediente) async {
+    for (var ingrediente in ingredientesDel) {
       if (ingrediente.id != null && ingrediente.id != 0) {
         try {
           await ingredienteRepository.delete(
             ingrediente.id,
           );
           print("ingrediente deletada! id: ${ingrediente.id}");
-        } catch (e) {
+        } on Exception catch (e) {
           print(e);
         }
       }
-    });
+    }
 
-    modosPreparoDel.forEach((ModoPreparo modoPreparo) async {
+    for (var modoPreparo in modosPreparoDel) {
       if (modoPreparo.id != null && modoPreparo.id != 0) {
         try {
           await modoPreparoRepository.delete(
             modoPreparo.id,
           );
           print("modo de preparo deletada! id: ${modoPreparo.id}");
-        } catch (e) {
+        } on Exception catch (e) {
           print(e);
         }
       }
-    });
+    }
   }
 }

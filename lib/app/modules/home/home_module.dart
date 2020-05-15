@@ -1,9 +1,10 @@
-import 'package:receitas/app/modules/home/home_controller.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:receitas/app/modules/receita/page/list/receita_list_controller.dart';
-import 'package:receitas/app/modules/receita/page/list/receita_list_page.dart';
-import 'package:receitas/app/modules/receita/repository/receita_repository.dart';
-import 'package:receitas/app/shareds/utils/database_helper.dart';
+
+import '../../shareds/utils/database_helper.dart';
+import '../receita/page/list/receita_list_controller.dart';
+import '../receita/page/list/receita_list_page.dart';
+import '../receita/repository/receita_repository.dart';
+import 'home_controller.dart';
 
 class HomeModule extends ChildModule {
   @override

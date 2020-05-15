@@ -1,5 +1,6 @@
 import 'package:mobx/mobx.dart';
-import 'package:receitas/app/modules/receita/model/receita.dart';
+
+import '../../model/receita.dart';
 
 part 'receita_checklist_controller.g.dart';
 

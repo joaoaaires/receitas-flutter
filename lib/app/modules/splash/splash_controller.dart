@@ -1,6 +1,4 @@
-
-import 'package:receitas/app/shareds/utils/database_helper.dart';
-import 'package:sqflite/sqflite.dart';
+import '../../shareds/utils/database_helper.dart';
 
 class SplashController {
   final DatabaseHelper _halper;
@@ -9,7 +7,7 @@ class SplashController {
 
   Future<Null> loading() async {
     await Future.delayed(Duration(seconds: 2));
-    Database database = await this._halper.database;
+    var database = await _halper.database;
     print("database ok! ${database != null}");
   }
 }

@@ -1,10 +1,11 @@
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:receitas/app/modules/receita/page/form/receita_form_controller.dart';
-import 'package:receitas/app/modules/receita/page/form/receita_form_page.dart';
-import 'package:receitas/app/modules/receita/repository/ingrediente_repository.dart';
-import 'package:receitas/app/modules/receita/repository/modo_preparo_repository.dart';
-import 'package:receitas/app/modules/receita/repository/receita_repository.dart';
-import 'package:receitas/app/shareds/utils/database_helper.dart';
+
+import '../../../../shareds/utils/database_helper.dart';
+import '../../repository/ingrediente_repository.dart';
+import '../../repository/modo_preparo_repository.dart';
+import '../../repository/receita_repository.dart';
+import 'receita_form_controller.dart';
+import 'receita_form_page.dart';
 
 class ReceitaFormModule extends ChildModule {
   @override

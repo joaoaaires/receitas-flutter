@@ -2,7 +2,7 @@ import 'dart:collection';
 
 class Task {
   static Task _task;
-  static Map<String, Future> _tasks = HashMap();
+  static final Map<String, Future> _tasks = HashMap();
 
   factory Task() {
     _task ??= Task._internalConstructor();

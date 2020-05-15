@@ -6,8 +6,8 @@ class ReceitaDots extends StatelessWidget {
 
   const ReceitaDots({
     Key key,
-    this.sizePage: 1,
-    this.currentyIndex: 0,
+    this.sizePage = 1,
+    this.currentyIndex = 0,
   }) : super(key: key);
 
   @override

@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 
 class AppChildCustom extends InheritedWidget {
   final Widget child;
-  String _olaMundoAgoraVaiRolar;
+  final String olaMundoAgoraVaiRolar;
 
-  AppChildCustom({this.child}) : super(child: child);
+  AppChildCustom({
+    this.child,
+    this.olaMundoAgoraVaiRolar,
+  }) : super(child: child);
 
   static AppChildCustom of(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType<AppChildCustom>();
@@ -14,9 +17,4 @@ class AppChildCustom extends InheritedWidget {
   bool updateShouldNotify(InheritedWidget oldWidget) {
     return oldWidget != this;
   }
-
-  set olaMundoAgoraVaiRolar(String value) =>
-      this._olaMundoAgoraVaiRolar = value;
-
-  String get olaMundoAgoraVaiRolar => this._olaMundoAgoraVaiRolar;
 }

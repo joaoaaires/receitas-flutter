@@ -1,6 +1,5 @@
-import 'package:receitas/app/modules/receita/model/modo_preparo.dart';
-import 'package:receitas/app/shareds/utils/database_helper.dart';
-import 'package:sqflite/sqflite.dart';
+import '../../../shareds/utils/database_helper.dart';
+import '../model/modo_preparo.dart';
 
 class ModoPreparoRepository {
   final DatabaseHelper _helper;
@@ -9,8 +8,8 @@ class ModoPreparoRepository {
 
   Future<int> create(ModoPreparo modoPreparo) async {
     try {
-      Database db = await this._helper.database;
-      int id = await db.rawInsert(
+      var db = await _helper.database;
+      var id = await db.rawInsert(
         "INSERT INTO modopreparo (idreceita, descricao) VALUES (?, ?);",
         [
           modoPreparo.idreceita,
@@ -18,7 +17,7 @@ class ModoPreparoRepository {
         ],
       );
       return id;
-    } catch (e) {
+    } on Exception catch (e) {
       print(e);
       throw "Não é possível criar modo de preparo.";
     }
@@ -26,16 +25,16 @@ class ModoPreparoRepository {
 
   Future<List<ModoPreparo>> readByIdReceita(int idreceita) async {
     try {
-      List<ModoPreparo> modosPreparo = [];
-      Database db = await this._helper.database;
-      List<Map> result = await db.rawQuery(
-          "SELECT id, idreceita, descricao FROM modopreparo WHERE idreceita = ?;",
-          [idreceita]);
-      result.forEach((map) {
+      var modosPreparo = <ModoPreparo>[];
+      var db = await _helper.database;
+      List<Map> result = await db.rawQuery('''
+          SELECT id, idreceita, descricao FROM modopreparo WHERE idreceita = ?;
+          ''', [idreceita]);
+      for (var map in result) {
         modosPreparo.add(ModoPreparo.fromMap(map));
-      });
+      }
       return modosPreparo;
-    } catch (e) {
+    } on Exception catch (e) {
       print(e);
       throw "Não é possível buscar modos de preparo.";
     }
@@ -45,12 +44,12 @@ class ModoPreparoRepository {
 
   Future<Null> delete(int id) async {
     try {
-      Database db = await this._helper.database;
+      var db = await _helper.database;
       await db.rawInsert(
         "DELETE FROM modopreparo WHERE id = ?",
         [id],
       );
-    } catch (e) {
+    } on Exception catch (e) {
       print(e);
       throw "Não é possível buscar ingredientes.";
     }
