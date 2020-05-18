@@ -114,7 +114,7 @@ class _ReceitaFormPageState
       receitaListController.update();
 
       Navigator.pop(context);
-      Modular.to.pop();
+      Modular.to.pop(true);
     }).catchError((error) {
       Navigator.pop(context);
       DialogCustom.showAlertDialogUtil(

@@ -42,10 +42,6 @@ class _ReceitaListPageState extends State<ReceitaListPage> {
           onPressed: () {},
           icon: Icon(Icons.search),
         ),
-        IconButton(
-          onPressed: () {},
-          icon: Icon(Icons.star),
-        ),
       ],
     );
   }

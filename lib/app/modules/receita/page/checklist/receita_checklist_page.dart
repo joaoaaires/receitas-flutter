@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 import '../../../../shareds/widgets/buttom_custom.dart';
+import '../../model/ingrediente.dart';
+import '../../model/modo_preparo.dart';
 import '../../model/receita.dart';
 import 'receita_checklist_controller.dart';
 
@@ -24,6 +27,7 @@ class _ReceitaChecklistPageState
     super.didChangeDependencies();
     final Receita receita = ModalRoute.of(context).settings.arguments;
     controller.receita = receita;
+    controller.load();
   }
 
   @override
@@ -64,18 +68,23 @@ class _ReceitaChecklistPageState
         children: <Widget>[
           getTitleReceita(),
           getChecklistReceita(),
-          getButtonFinalizarReceita(),
+          // getButtonFinalizarReceita(),
         ],
       ),
     );
   }
 
   Widget getTitleReceita() {
-    return Text(
-      controller.receita.titulo,
-      style: TextStyle(
-        fontSize: 28.0,
-      ),
+    return Observer(
+      builder: (_) {
+        var receita = controller.receita;
+        return Text(
+          receita != null ? receita.titulo : "Título",
+          style: TextStyle(
+            fontSize: 28.0,
+          ),
+        );
+      },
     );
   }
 
@@ -83,9 +92,13 @@ class _ReceitaChecklistPageState
     return Expanded(
       child: SingleChildScrollView(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             getChecklistSubtitleReceita("Ingredientes"),
+            getChecklistIngredientes(),
             getChecklistSubtitleReceita("Modo de Preparo"),
+            getChecklistModosPreparo(),
           ],
         ),
       ),
@@ -95,6 +108,78 @@ class _ReceitaChecklistPageState
 
       //   ],
       // ),
+    );
+  }
+
+  Widget getChecklistIngredientes() {
+    return Observer(
+      builder: (_) {
+        List<Ingrediente> ingredientes = controller.ingredientes;
+
+        if (ingredientes.length == 0) {
+          return Center(
+            child: Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: CircularProgressIndicator(),
+            ),
+          );
+        }
+
+        return Column(
+          children: List.generate(
+            ingredientes.length,
+            (index) {
+              var ingrediente = ingredientes[index];
+              var key = "I${ingrediente.id}";
+              return Observer(
+                builder: (_) {
+                  return ListTile(
+                    leading: Checkbox(
+                      value: controller.value(key),
+                      onChanged: (value) => controller.changeValue(key),
+                    ),
+                    title: Text(ingrediente.descricao),
+                  );
+                },
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+
+  Widget getChecklistModosPreparo() {
+    return Observer(
+      builder: (_) {
+        List<ModoPreparo> modosPreparo = controller.modosPreparo;
+
+        if (modosPreparo.length == 0) {
+          return Center(
+            child: Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: CircularProgressIndicator(),
+            ),
+          );
+        }
+
+        return Column(
+          children: List.generate(
+            modosPreparo.length,
+            (index) {
+              var modoPreparo = modosPreparo[index];
+              var key = "M${modoPreparo.id}";
+              return ListTile(
+                leading: Checkbox(
+                  value: controller.value(key),
+                  onChanged: (value) => controller.changeValue(key),
+                ),
+                title: Text(modoPreparo.descricao),
+              );
+            },
+          ),
+        );
+      },
     );
   }
 
@@ -123,10 +208,13 @@ class _ReceitaChecklistPageState
     }
   }
 
-  void onPressEditReceita() {
-    Modular.to.pushNamed(
+  void onPressEditReceita() async {
+    var clickInButtonSave = await Modular.to.pushNamed(
       "/receita/form",
       arguments: controller.receita,
     );
+    if (clickInButtonSave != null && clickInButtonSave) {
+      controller.load();
+    }
   }
 }

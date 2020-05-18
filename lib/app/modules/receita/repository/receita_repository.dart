@@ -39,6 +39,24 @@ class ReceitaRepository {
     }
   }
 
+  Future<Receita> readById(int id) async {
+    try {
+      var db = await _helper.database;
+      List<Map> result = await db.rawQuery(
+        "SELECT id, titulo FROM receita WHERE id = ?;",
+        [
+          id,
+        ],
+      );
+      return result != null && result.isNotEmpty
+          ? Receita.fromMap(result[0])
+          : null;
+    } on Exception catch (e) {
+      print(e);
+      throw "Não foi possível recuperar receitas";
+    }
+  }
+
   Future<int> update(Receita receita) async {
     try {
       var db = await _helper.database;
