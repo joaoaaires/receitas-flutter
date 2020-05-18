@@ -34,14 +34,48 @@ class _ReceitaListPageState extends State<ReceitaListPage> {
 
   Widget getAppBar() {
     return AppBar(
-      title: Text(widget.title),
+      title: Observer(
+        builder: (_) {
+          var showCampoPesquisa = _receitaListController.showCampoPesquisa;
+          return showCampoPesquisa
+              ? TextField(
+                  autofocus: true,
+                  controller: _receitaListController.textEditingController,
+                  decoration: const InputDecoration(
+                    hintText: "Pesquisar",
+                    border: InputBorder.none,
+                    hintStyle: TextStyle(
+                      color: Colors.white30,
+                    ),
+                  ),
+                  cursorColor: Colors.black,
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 16.0,
+                  ),
+                )
+              : Text(widget.title);
+        },
+      ),
       backgroundColor: Colors.transparent,
       elevation: 0.0,
       actions: <Widget>[
-        IconButton(
-          onPressed: () {},
-          icon: Icon(Icons.search),
-        ),
+        Observer(
+          builder: (_) {
+            var showCampoPesquisa = _receitaListController.showCampoPesquisa;
+            if (showCampoPesquisa) {
+              return IconButton(
+                onPressed: _receitaListController.showPesquisa,
+                icon: Icon(Icons.close),
+              );
+            } else {
+              return IconButton(
+                onPressed: _receitaListController.showPesquisa,
+                icon: Icon(Icons.search),
+              );
+            }
+          },
+        )
       ],
     );
   }
@@ -63,22 +97,38 @@ class _ReceitaListPageState extends State<ReceitaListPage> {
 
         List<Receita> receitas = _receitaListController.receitas.value;
 
-        var size = receitas.length + 1;
-        var isEmpty = receitas.isEmpty;
+          var size = receitas.length;
+          var isEmpty = receitas.isEmpty;
 
-        if (isEmpty) size = size + 1;
+        if (_receitaListController.showCampoPesquisa) {
+          if (isEmpty) size = size + 1;
 
-        return ListView.builder(
-          physics: BouncingScrollPhysics(),
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          itemCount: size,
-          itemBuilder: (_, index) {
-            if (index == 0) return getButtonNovaReceita();
-            if (index == 1 && isEmpty) return getItemMensagemInfo();
+          return ListView.builder(
+            physics: BouncingScrollPhysics(),
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            itemCount: size,
+            itemBuilder: (_, index) {
+              if (index == 0 && isEmpty) return getItemMensagemInfoPesquisa();
 
-            return getItemReceita(receitas[index - 1]);
-          },
-        );
+              return getItemReceita(receitas[index]);
+            },
+          );
+        } else {
+          size = size + 1;
+          if (isEmpty) size = size + 1;
+
+          return ListView.builder(
+            physics: BouncingScrollPhysics(),
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            itemCount: size,
+            itemBuilder: (_, index) {
+              if (index == 0) return getButtonNovaReceita();
+              if (index == 1 && isEmpty) return getItemMensagemInfo();
+
+              return getItemReceita(receitas[index - 1]);
+            },
+          );
+        }
       },
     );
   }
@@ -196,6 +246,33 @@ class _ReceitaListPageState extends State<ReceitaListPage> {
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: Text(
                   '''Você ainda não possui receitas cadastradas. Clique no botão acima para criar uma nova receita.''',
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget getItemMensagemInfoPesquisa() {
+    var borderRadius = BorderRadius.circular(4.0);
+
+    return Padding(
+      padding: EdgeInsets.only(top: 8.0),
+      child: Material(
+        elevation: 3.0,
+        color: Colors.white,
+        borderRadius: borderRadius,
+        child: InkWell(
+          borderRadius: borderRadius,
+          child: ListTile(
+            title: Center(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: Text(
+                  '''Você ainda não possui receitas cadastradas.''',
                   textAlign: TextAlign.center,
                 ),
               ),
