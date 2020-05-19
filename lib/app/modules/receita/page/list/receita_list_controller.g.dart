@@ -9,6 +9,23 @@ part of 'receita_list_controller.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$ReceitaListController on _ReceitaListControllerBase, Store {
+  final _$heightAtom = Atom(name: '_ReceitaListControllerBase.height');
+
+  @override
+  double get height {
+    _$heightAtom.context.enforceReadPolicy(_$heightAtom);
+    _$heightAtom.reportObserved();
+    return super.height;
+  }
+
+  @override
+  set height(double value) {
+    _$heightAtom.context.conditionallyRunInAction(() {
+      super.height = value;
+      _$heightAtom.reportChanged();
+    }, _$heightAtom, name: '${_$heightAtom.name}_set');
+  }
+
   final _$receitasAtom = Atom(name: '_ReceitaListControllerBase.receitas');
 
   @override
@@ -59,9 +76,31 @@ mixin _$ReceitaListController on _ReceitaListControllerBase, Store {
   }
 
   @override
+  void showAdMob() {
+    final _$actionInfo =
+        _$_ReceitaListControllerBaseActionController.startAction();
+    try {
+      return super.showAdMob();
+    } finally {
+      _$_ReceitaListControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void hideAdMob() {
+    final _$actionInfo =
+        _$_ReceitaListControllerBaseActionController.startAction();
+    try {
+      return super.hideAdMob();
+    } finally {
+      _$_ReceitaListControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     final string =
-        'receitas: ${receitas.toString()},showCampoPesquisa: ${showCampoPesquisa.toString()}';
+        'height: ${height.toString()},receitas: ${receitas.toString()},showCampoPesquisa: ${showCampoPesquisa.toString()}';
     return '{$string}';
   }
 }

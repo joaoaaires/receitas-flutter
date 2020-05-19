@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_native_admob/flutter_native_admob.dart';
 
 import '../../model/receita.dart';
 import 'receita_list_controller.dart';
@@ -22,6 +23,7 @@ class _ReceitaListPageState extends State<ReceitaListPage> {
   void initState() {
     super.initState();
     _receitaListController = Modular.get<ReceitaListController>();
+    //ca-app-pub-3698978879549955/3613339277
   }
 
   @override
@@ -97,8 +99,8 @@ class _ReceitaListPageState extends State<ReceitaListPage> {
 
         List<Receita> receitas = _receitaListController.receitas.value;
 
-          var size = receitas.length;
-          var isEmpty = receitas.isEmpty;
+        var size = receitas.length;
+        var isEmpty = receitas.isEmpty;
 
         if (_receitaListController.showCampoPesquisa) {
           if (isEmpty) size = size + 1;
@@ -114,7 +116,7 @@ class _ReceitaListPageState extends State<ReceitaListPage> {
             },
           );
         } else {
-          size = size + 1;
+          size = size + 2;
           if (isEmpty) size = size + 1;
 
           return ListView.builder(
@@ -123,9 +125,10 @@ class _ReceitaListPageState extends State<ReceitaListPage> {
             itemCount: size,
             itemBuilder: (_, index) {
               if (index == 0) return getButtonNovaReceita();
-              if (index == 1 && isEmpty) return getItemMensagemInfo();
+              if (index == 1) return getItemMenuAdMob();
+              if (index == 2 && isEmpty) return getItemMensagemInfo();
 
-              return getItemReceita(receitas[index - 1]);
+              return getItemReceita(receitas[index - 2]);
             },
           );
         }
@@ -226,6 +229,36 @@ class _ReceitaListPageState extends State<ReceitaListPage> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget getItemMenuAdMob() {
+    var borderRadius = BorderRadius.circular(4.0);
+
+    return Observer(
+      builder: (_) {
+        var height = _receitaListController.height;
+        return Padding(
+          padding: EdgeInsets.only(top: height == 0 ? 0 : 8.0),
+          child: Material(
+            elevation: 3.0,
+            color: Colors.white,
+            borderRadius: borderRadius,
+            child: Container(
+              height: height,
+              child: ClipRRect(
+                borderRadius: borderRadius,
+                child: NativeAdmob(
+                  // Your ad unit id
+                  adUnitID: _receitaListController.adUnitID,
+                  controller: _receitaListController.nativeAdmobController,
+                  type: NativeAdmobType.banner,
+                ),
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 
