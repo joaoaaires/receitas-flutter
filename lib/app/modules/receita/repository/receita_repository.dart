@@ -39,16 +39,13 @@ class ReceitaRepository {
     }
   }
 
-    Future<List<Receita>> readByTitulo(String titulo) async {
+  Future<List<Receita>> readByTitulo(String titulo) async {
     try {
       var receitas = <Receita>[];
       var db = await _helper.database;
       List<Map> result = await db.rawQuery(
-        "SELECT id, titulo FROM receita WHERE titulo like ? ORDER BY titulo;",
-        [
-          "%$titulo%"
-        ]
-      );
+          "SELECT id, titulo FROM receita WHERE titulo like ? ORDER BY titulo;",
+          ["%$titulo%"]);
       for (var map in result) {
         receitas.add(Receita.fromMap(map));
       }
@@ -91,6 +88,19 @@ class ReceitaRepository {
     } on Exception catch (e) {
       print(e);
       throw "Não foi possível criar receita.";
+    }
+  }
+
+  Future<void> delete(int id) async {
+    try {
+      var db = await _helper.database;
+      await db.rawDelete(
+        "DELETE FROM receita WHERE id = ?;",
+        [id],
+      );
+    } on Exception catch (e) {
+      print(e);
+      throw "Não foi possível deletar receita.";
     }
   }
 }

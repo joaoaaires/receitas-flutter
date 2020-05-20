@@ -54,4 +54,17 @@ class IngredienteRepository {
       throw "Não é possível buscar ingredientes.";
     }
   }
+
+    Future<Null> deleteByIdReceita(int id) async {
+    try {
+      var db = await _helper.database;
+      await db.rawInsert(
+        "DELETE FROM ingrediente WHERE idreceita = ?",
+        [id],
+      );
+    } on Exception catch (e) {
+      print(e);
+      throw "Não é possível buscar ingredientes.";
+    }
+  }
 }

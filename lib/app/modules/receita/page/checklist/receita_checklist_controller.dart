@@ -35,14 +35,14 @@ abstract class _ReceitaChecklistControllerBase with Store {
   );
 
   Future<void> load() async {
-    if (receita != null) {
-      if (receita.id != null && receita.id != 0) {
-        var db = await receitaRepository.readById(
-          receita.id,
-        );
-        receita = db;
-      }
+    if (receita != null && receita.id != null && receita.id != 0) {
+      var db = await receitaRepository.readById(
+        receita.id,
+      );
+      receita = db;
+    }
 
+    if (receita != null) {
       if (receita.id != null && receita.id != 0) {
         var ingredientes = await ingredienteRepository.readByIdReceita(
           receita.id,
@@ -55,6 +55,16 @@ abstract class _ReceitaChecklistControllerBase with Store {
           receita.id,
         );
         this.modosPreparo = modosPreparo.asObservable();
+      }
+    }
+  }
+
+  Future<void> delete() async {
+    if (receita != null) {
+      if (receita.id != null && receita.id != 0) {
+        await modoPreparoRepository.deleteByIdReceita(receita.id);
+        await ingredienteRepository.deleteByIdReceita(receita.id);
+        await receitaRepository.delete(receita.id);
       }
     }
   }

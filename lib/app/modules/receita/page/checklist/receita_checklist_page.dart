@@ -3,9 +3,11 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 import '../../../../shareds/widgets/buttom_custom.dart';
+import '../../../../shareds/widgets/dialog_custom.dart';
 import '../../model/ingrediente.dart';
 import '../../model/modo_preparo.dart';
 import '../../model/receita.dart';
+import '../list/receita_list_controller.dart';
 import 'receita_checklist_controller.dart';
 
 class ReceitaChecklistPage extends StatefulWidget {
@@ -48,6 +50,10 @@ class _ReceitaChecklistPageState
           onSelected: onSelectedAcaoReceita,
           itemBuilder: (_) {
             return [
+              PopupMenuItem<String>(
+                value: "excluir",
+                child: Text("Excluir"),
+              ),
               PopupMenuItem<String>(
                 value: "editar",
                 child: Text("Editar"),
@@ -205,6 +211,8 @@ class _ReceitaChecklistPageState
   void onSelectedAcaoReceita(String value) {
     if (value != null && value == "editar") {
       onPressEditReceita();
+    } else if (value != null && value == "excluir") {
+      onPressDeleteReceita();
     }
   }
 
@@ -217,4 +225,23 @@ class _ReceitaChecklistPageState
       controller.load();
     }
   }
+
+  void onPressDeleteReceita() {
+    DialogCustom.showProgress(context);
+    controller.delete().then((response) {
+      var receitaListController = Modular.get<ReceitaListController>();
+      receitaListController.update();
+      
+      Navigator.pop(context);
+      Modular.to.pop(true);
+    }).catchError((error) {
+      Navigator.pop(context);
+      DialogCustom.showAlertDialogUtil(
+        context,
+        "Atenção",
+        error,
+      );
+    });
+  }
+
 }
