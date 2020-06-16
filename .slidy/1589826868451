@@ -1,0 +1,2 @@
+lib/app/modules/receita/store/receita_checklist_item_controller.dart
+test/app/modules/receita/store/receita_checklist_item_controller_test.dart

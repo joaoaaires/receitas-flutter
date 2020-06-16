@@ -59,7 +59,6 @@ abstract class _ReceitaFormControllerBase with Store {
   }
 
   Future<Null> load() async {
-    //carregar ingredientes e modo de preparo
     if (receita.id != null && receita.id != 0) {
       var ingredientes = await ingredienteRepository.readByIdReceita(
         receita.id,

@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 import '../../../../shareds/widgets/buttom_custom.dart';
+import '../../../../shareds/widgets/dialog_custom.dart';
+import '../../model/ingrediente.dart';
+import '../../model/modo_preparo.dart';
 import '../../model/receita.dart';
+import '../list/receita_list_controller.dart';
 import 'receita_checklist_controller.dart';
 
 class ReceitaChecklistPage extends StatefulWidget {
@@ -24,6 +29,7 @@ class _ReceitaChecklistPageState
     super.didChangeDependencies();
     final Receita receita = ModalRoute.of(context).settings.arguments;
     controller.receita = receita;
+    controller.load();
   }
 
   @override
@@ -45,6 +51,10 @@ class _ReceitaChecklistPageState
           itemBuilder: (_) {
             return [
               PopupMenuItem<String>(
+                value: "excluir",
+                child: Text("Excluir"),
+              ),
+              PopupMenuItem<String>(
                 value: "editar",
                 child: Text("Editar"),
               ),
@@ -64,18 +74,23 @@ class _ReceitaChecklistPageState
         children: <Widget>[
           getTitleReceita(),
           getChecklistReceita(),
-          getButtonFinalizarReceita(),
+          // getButtonFinalizarReceita(),
         ],
       ),
     );
   }
 
   Widget getTitleReceita() {
-    return Text(
-      controller.receita.titulo,
-      style: TextStyle(
-        fontSize: 28.0,
-      ),
+    return Observer(
+      builder: (_) {
+        var receita = controller.receita;
+        return Text(
+          receita != null ? receita.titulo : "Título",
+          style: TextStyle(
+            fontSize: 28.0,
+          ),
+        );
+      },
     );
   }
 
@@ -83,9 +98,13 @@ class _ReceitaChecklistPageState
     return Expanded(
       child: SingleChildScrollView(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             getChecklistSubtitleReceita("Ingredientes"),
+            getChecklistIngredientes(),
             getChecklistSubtitleReceita("Modo de Preparo"),
+            getChecklistModosPreparo(),
           ],
         ),
       ),
@@ -95,6 +114,78 @@ class _ReceitaChecklistPageState
 
       //   ],
       // ),
+    );
+  }
+
+  Widget getChecklistIngredientes() {
+    return Observer(
+      builder: (_) {
+        List<Ingrediente> ingredientes = controller.ingredientes;
+
+        if (ingredientes.length == 0) {
+          return Center(
+            child: Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: CircularProgressIndicator(),
+            ),
+          );
+        }
+
+        return Column(
+          children: List.generate(
+            ingredientes.length,
+            (index) {
+              var ingrediente = ingredientes[index];
+              var key = "I${ingrediente.id}";
+              return Observer(
+                builder: (_) {
+                  return ListTile(
+                    leading: Checkbox(
+                      value: controller.value(key),
+                      onChanged: (value) => controller.changeValue(key),
+                    ),
+                    title: Text(ingrediente.descricao),
+                  );
+                },
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+
+  Widget getChecklistModosPreparo() {
+    return Observer(
+      builder: (_) {
+        List<ModoPreparo> modosPreparo = controller.modosPreparo;
+
+        if (modosPreparo.length == 0) {
+          return Center(
+            child: Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: CircularProgressIndicator(),
+            ),
+          );
+        }
+
+        return Column(
+          children: List.generate(
+            modosPreparo.length,
+            (index) {
+              var modoPreparo = modosPreparo[index];
+              var key = "M${modoPreparo.id}";
+              return ListTile(
+                leading: Checkbox(
+                  value: controller.value(key),
+                  onChanged: (value) => controller.changeValue(key),
+                ),
+                title: Text(modoPreparo.descricao),
+              );
+            },
+          ),
+        );
+      },
     );
   }
 
@@ -120,13 +211,37 @@ class _ReceitaChecklistPageState
   void onSelectedAcaoReceita(String value) {
     if (value != null && value == "editar") {
       onPressEditReceita();
+    } else if (value != null && value == "excluir") {
+      onPressDeleteReceita();
     }
   }
 
-  void onPressEditReceita() {
-    Modular.to.pushNamed(
+  void onPressEditReceita() async {
+    var clickInButtonSave = await Modular.to.pushNamed(
       "/receita/form",
       arguments: controller.receita,
     );
+    if (clickInButtonSave != null && clickInButtonSave) {
+      controller.load();
+    }
   }
+
+  void onPressDeleteReceita() {
+    DialogCustom.showProgress(context);
+    controller.delete().then((response) {
+      var receitaListController = Modular.get<ReceitaListController>();
+      receitaListController.update();
+      
+      Navigator.pop(context);
+      Modular.to.pop(true);
+    }).catchError((error) {
+      Navigator.pop(context);
+      DialogCustom.showAlertDialogUtil(
+        context,
+        "Atenção",
+        error,
+      );
+    });
+  }
+
 }

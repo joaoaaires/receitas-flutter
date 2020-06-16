@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_native_admob/flutter_native_admob.dart';
 
 import '../../model/receita.dart';
 import 'receita_list_controller.dart';
@@ -22,6 +23,7 @@ class _ReceitaListPageState extends State<ReceitaListPage> {
   void initState() {
     super.initState();
     _receitaListController = Modular.get<ReceitaListController>();
+    //ca-app-pub-3698978879549955/3613339277
   }
 
   @override
@@ -34,18 +36,48 @@ class _ReceitaListPageState extends State<ReceitaListPage> {
 
   Widget getAppBar() {
     return AppBar(
-      title: Text(widget.title),
+      title: Observer(
+        builder: (_) {
+          var showCampoPesquisa = _receitaListController.showCampoPesquisa;
+          return showCampoPesquisa
+              ? TextField(
+                  autofocus: true,
+                  controller: _receitaListController.textEditingController,
+                  decoration: const InputDecoration(
+                    hintText: "Pesquisar",
+                    border: InputBorder.none,
+                    hintStyle: TextStyle(
+                      color: Colors.white30,
+                    ),
+                  ),
+                  cursorColor: Colors.black,
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 16.0,
+                  ),
+                )
+              : Text(widget.title);
+        },
+      ),
       backgroundColor: Colors.transparent,
       elevation: 0.0,
       actions: <Widget>[
-        IconButton(
-          onPressed: () {},
-          icon: Icon(Icons.search),
-        ),
-        IconButton(
-          onPressed: () {},
-          icon: Icon(Icons.star),
-        ),
+        Observer(
+          builder: (_) {
+            var showCampoPesquisa = _receitaListController.showCampoPesquisa;
+            if (showCampoPesquisa) {
+              return IconButton(
+                onPressed: _receitaListController.showPesquisa,
+                icon: Icon(Icons.close),
+              );
+            } else {
+              return IconButton(
+                onPressed: _receitaListController.showPesquisa,
+                icon: Icon(Icons.search),
+              );
+            }
+          },
+        )
       ],
     );
   }
@@ -67,22 +99,39 @@ class _ReceitaListPageState extends State<ReceitaListPage> {
 
         List<Receita> receitas = _receitaListController.receitas.value;
 
-        var size = receitas.length + 1;
+        var size = receitas.length;
         var isEmpty = receitas.isEmpty;
 
-        if (isEmpty) size = size + 1;
+        if (_receitaListController.showCampoPesquisa) {
+          if (isEmpty) size = size + 1;
 
-        return ListView.builder(
-          physics: BouncingScrollPhysics(),
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          itemCount: size,
-          itemBuilder: (_, index) {
-            if (index == 0) return getButtonNovaReceita();
-            if (index == 1 && isEmpty) return getItemMensagemInfo();
+          return ListView.builder(
+            physics: BouncingScrollPhysics(),
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            itemCount: size,
+            itemBuilder: (_, index) {
+              if (index == 0 && isEmpty) return getItemMensagemInfoPesquisa();
 
-            return getItemReceita(receitas[index - 1]);
-          },
-        );
+              return getItemReceita(receitas[index]);
+            },
+          );
+        } else {
+          size = size + 2;
+          if (isEmpty) size = size + 1;
+
+          return ListView.builder(
+            physics: BouncingScrollPhysics(),
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            itemCount: size,
+            itemBuilder: (_, index) {
+              if (index == 0) return getButtonNovaReceita();
+              if (index == 1) return getItemMenuAdMob();
+              if (index == 2 && isEmpty) return getItemMensagemInfo();
+
+              return getItemReceita(receitas[index - 2]);
+            },
+          );
+        }
       },
     );
   }
@@ -183,6 +232,36 @@ class _ReceitaListPageState extends State<ReceitaListPage> {
     );
   }
 
+  Widget getItemMenuAdMob() {
+    var borderRadius = BorderRadius.circular(4.0);
+
+    return Observer(
+      builder: (_) {
+        var height = _receitaListController.height;
+        return Padding(
+          padding: EdgeInsets.only(top: height == 0 ? 0 : 8.0),
+          child: Material(
+            elevation: 3.0,
+            color: Colors.white,
+            borderRadius: borderRadius,
+            child: Container(
+              height: height,
+              child: ClipRRect(
+                borderRadius: borderRadius,
+                child: NativeAdmob(
+                  // Your ad unit id
+                  adUnitID: _receitaListController.adUnitID,
+                  controller: _receitaListController.nativeAdmobController,
+                  type: NativeAdmobType.banner,
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   Widget getItemMensagemInfo() {
     var borderRadius = BorderRadius.circular(4.0);
 
@@ -200,6 +279,33 @@ class _ReceitaListPageState extends State<ReceitaListPage> {
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: Text(
                   '''Você ainda não possui receitas cadastradas. Clique no botão acima para criar uma nova receita.''',
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget getItemMensagemInfoPesquisa() {
+    var borderRadius = BorderRadius.circular(4.0);
+
+    return Padding(
+      padding: EdgeInsets.only(top: 8.0),
+      child: Material(
+        elevation: 3.0,
+        color: Colors.white,
+        borderRadius: borderRadius,
+        child: InkWell(
+          borderRadius: borderRadius,
+          child: ListTile(
+            title: Center(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: Text(
+                  '''Você ainda não possui receitas cadastradas.''',
                   textAlign: TextAlign.center,
                 ),
               ),
