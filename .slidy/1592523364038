@@ -1,0 +1,5 @@
+lib/app/modules/usuario/usuario_module.dart
+lib/app/modules/usuario/usuario_page.dart
+test/app/modules/usuario/usuario_page_test.dart
+lib/app/modules/usuario/usuario_controller.dart
+test/app/modules/usuario/usuario_controller_test.dart

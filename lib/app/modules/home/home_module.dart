@@ -1,9 +1,9 @@
 import 'package:flutter_modular/flutter_modular.dart';
 
-import '../../shareds/utils/database_helper.dart';
 import '../receita/page/list/receita_list_controller.dart';
 import '../receita/page/list/receita_list_page.dart';
 import '../receita/repository/receita_repository.dart';
+import '../shared/helper/database_helper.dart';
 import 'home_controller.dart';
 
 class HomeModule extends ChildModule {

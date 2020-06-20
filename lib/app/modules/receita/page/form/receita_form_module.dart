@@ -1,6 +1,6 @@
 import 'package:flutter_modular/flutter_modular.dart';
 
-import '../../../../shareds/utils/database_helper.dart';
+import '../../../shared/helper/database_helper.dart';
 import '../../repository/ingrediente_repository.dart';
 import '../../repository/modo_preparo_repository.dart';
 import '../../repository/receita_repository.dart';

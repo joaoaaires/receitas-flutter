@@ -1,4 +1,4 @@
-import '../../../shareds/utils/database_helper.dart';
+import '../../shared/helper/database_helper.dart';
 import '../model/ingrediente.dart';
 
 class IngredienteRepository {

@@ -7,6 +7,7 @@ class TextFormFieldCustom extends StatelessWidget {
   final String initialValue;
   final Function(String) onSaved;
   final bool enableInteractiveSelection;
+  final bool obscureText;
   final TextInputType keyboardType;
   final TextEditingController controller;
   final List<TextInputFormatter> inputFormatters;
@@ -17,6 +18,7 @@ class TextFormFieldCustom extends StatelessWidget {
     this.hintText,
     this.initialValue,
     this.onSaved,
+    this.obscureText = false,
     this.enableInteractiveSelection = true,
     this.keyboardType = TextInputType.text,
     this.inputFormatters = const <TextInputFormatter>[],
@@ -35,6 +37,7 @@ class TextFormFieldCustom extends StatelessWidget {
         onSaved: onSaved,
         initialValue: initialValue,
         enableInteractiveSelection: enableInteractiveSelection,
+        obscureText: obscureText,
         decoration: InputDecoration(
           border: OutlineInputBorder(),
           fillColor: Colors.white,
