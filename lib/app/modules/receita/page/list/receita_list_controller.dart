@@ -12,7 +12,7 @@ part 'receita_list_controller.g.dart';
 class ReceitaListController = _ReceitaListControllerBase
     with _$ReceitaListController;
 
-abstract class _ReceitaListControllerBase with Store, Disposable {
+abstract class _ReceitaListControllerBase extends Disposable with Store {
   @observable
   double height = 0;
   @observable

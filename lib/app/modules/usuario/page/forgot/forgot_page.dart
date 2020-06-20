@@ -117,16 +117,20 @@ class _ForgotPageState extends ModularState<ForgotPage, UsuarioController> {
     );
   }
 
-  void setLoading(bool state) {
-    isLoading = state;
+  void onLoading() {
+    isLoading = true;
     setState(() {});
   }
-
+  
+  void offLoading() {
+    isLoading = false;
+    setState(() {});
+  }
   void _onPressCadastrar() {
     if (isLoading) {
       return;
     }
-    setLoading(true);
+    onLoading();
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
 
@@ -152,10 +156,10 @@ class _ForgotPageState extends ModularState<ForgotPage, UsuarioController> {
           );
         },
       ).whenComplete(
-            () => setLoading(false),
+             offLoading
       );
     } else {
-      setLoading(false);
+      offLoading();
     }
   }
 }
