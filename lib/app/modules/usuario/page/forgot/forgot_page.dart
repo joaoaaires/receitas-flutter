@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
-import '../../../../shareds/utils/validator/validator.dart';
-import '../../../../shareds/widgets/dialog_custom.dart';
-import '../../../../shareds/widgets/text_form_field_custom.dart';
+import '../../../shared/util/validator/validator.dart';
+import '../../../shared/widget/dialog_custom.dart';
+import '../../../shared/widget/text_form_field_custom.dart';
 import '../../model/usuario_form.dart';
 import '../../usuario_controller.dart';
 
@@ -126,6 +126,7 @@ class _ForgotPageState extends ModularState<ForgotPage, UsuarioController> {
     isLoading = false;
     setState(() {});
   }
+  
   void _onPressCadastrar() {
     if (isLoading) {
       return;

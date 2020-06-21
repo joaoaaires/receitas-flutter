@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
-import '../../../../shareds/utils/validator/validator.dart';
-import '../../../../shareds/widgets/dialog_custom.dart';
-import '../../../../shareds/widgets/text_form_field_custom.dart';
+import '../../../shared/util/validator/validator.dart';
+import '../../../shared/widget/dialog_custom.dart';
+import '../../../shared/widget/text_form_field_custom.dart';
 import '../../model/receita.dart';
 import '../../widget/receita_dots.dart';
 import 'form_ingrediente/receita_form_ingrediente_page.dart';

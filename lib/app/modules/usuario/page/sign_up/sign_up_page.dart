@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
-import '../../../../shareds/utils/validator/validator.dart';
-import '../../../../shareds/widgets/dialog_custom.dart';
-import '../../../../shareds/widgets/text_form_field_custom.dart';
+import '../../../shared/util/validator/validator.dart';
+import '../../../shared/widget/dialog_custom.dart';
+import '../../../shared/widget/text_form_field_custom.dart';
 import '../../model/usuario_form.dart';
 import '../../usuario_controller.dart';
 
@@ -156,8 +156,13 @@ class _SignUpPageState extends ModularState<SignUpPage, UsuarioController> {
     );
   }
 
-  void setLoading(bool state) {
-    isLoading = state;
+  void onLoading() {
+    isLoading = true;
+    setState(() {});
+  }
+
+  void offLoading() {
+    isLoading = false;
     setState(() {});
   }
 
@@ -165,7 +170,7 @@ class _SignUpPageState extends ModularState<SignUpPage, UsuarioController> {
     if (isLoading) {
       return;
     }
-    setLoading(true);
+    onLoading();
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
 
@@ -186,11 +191,9 @@ class _SignUpPageState extends ModularState<SignUpPage, UsuarioController> {
             error.message,
           );
         },
-      ).whenComplete(
-        () => setLoading(false),
-      );
+      ).whenComplete(offLoading);
     } else {
-      setLoading(false);
+      offLoading();
     }
   }
 }
