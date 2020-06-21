@@ -8,9 +8,7 @@ class SplashController {
   SplashController(this._halper, this._client);
 
   Future<Null> loading() async {
-    await Future.delayed(Duration(seconds: 6));
-
-
+    //CARREGAR BANCO DE DADOS
     var database = await _halper.database;
     print("database ok! ${database != null}");
 
