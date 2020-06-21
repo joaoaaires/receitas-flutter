@@ -12,7 +12,8 @@ class IngredienteRepository {
       var id = await db.rawInsert(
         "INSERT INTO ingrediente (idreceita, descricao) VALUES (?, ?);",
         [
-          ingrediente.idreceita,
+          // ingrediente.idreceita,
+          0,
           ingrediente.descricao,
         ],
       );

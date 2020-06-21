@@ -1,5 +1,6 @@
 import 'package:flutter_modular/flutter_modular.dart';
 
+import '../../../shared/helper/client_http_helper.dart';
 import '../../../shared/helper/database_helper.dart';
 import '../../repository/ingrediente_repository.dart';
 import '../../repository/modo_preparo_repository.dart';
@@ -10,11 +11,7 @@ import 'receita_form_page.dart';
 class ReceitaFormModule extends ChildModule {
   @override
   List<Bind> get binds => [
-        Bind((i) => ReceitaFormController(
-              i.get<ReceitaRepository>(),
-              i.get<IngredienteRepository>(),
-              i.get<ModoPreparoRepository>(),
-            )),
+        Bind((i) => ReceitaFormController(i.get<ClientHttpHelper>())),
         Bind((i) => ModoPreparoRepository(i.get<DatabaseHelper>())),
         Bind((i) => IngredienteRepository(i.get<DatabaseHelper>())),
         Bind((i) => ReceitaRepository(i.get<DatabaseHelper>())),

@@ -21,7 +21,7 @@ class _SplashPageState extends ModularState<SplashPage, SplashController> {
     super.initState();
     SchedulerBinding.instance.addPostFrameCallback((_) {
       _splashController.loading().then((response) {
-        Modular.to.pushReplacementNamed("/usuario/signin");
+        Modular.to.pushReplacementNamed("/home");
       });
     });
   }

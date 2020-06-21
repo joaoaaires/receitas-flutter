@@ -83,4 +83,66 @@ class ClientHttpHelper {
     print(responseHttp.toJson());
     return responseHttp;
   }
+
+  Future<ResponseHttp> get(String path) async {
+    Response response;
+    ResponseHttp responseHttp;
+
+    await setAuthorization();
+
+    try {
+      print('[INFO]($path)');
+      response = await _dio.get(path);
+    } on DioError catch (e) {
+      response = e.response;
+      print(e);
+    }
+
+    if (response != null) {
+      await updateToken(response.headers);
+      responseHttp = ResponseHttp.fromJson(
+        response.data,
+      );
+    } else {
+      responseHttp = ResponseHttp(
+        status: 0,
+        error: "SERVER_ERROR",
+        message: "Servidor não está respondendo.",
+      );
+    }
+
+    print(responseHttp.toJson());
+    return responseHttp;
+  }
+
+  Future<ResponseHttp> put(String path, Map<String, Object> params) async {
+    Response response;
+    ResponseHttp responseHttp;
+
+    await setAuthorization();
+
+    try {
+      print('[INFO]($path) >>>>> $params');
+      response = await _dio.put(path, data: params);
+    } on DioError catch (e) {
+      response = e.response;
+      print(e);
+    }
+
+    if (response != null) {
+      await updateToken(response.headers);
+      responseHttp = ResponseHttp.fromJson(
+        response.data,
+      );
+    } else {
+      responseHttp = ResponseHttp(
+        status: 0,
+        error: "SERVER_ERROR",
+        message: "Servidor não está respondendo.",
+      );
+    }
+
+    print(responseHttp.toJson());
+    return responseHttp;
+  }
 }

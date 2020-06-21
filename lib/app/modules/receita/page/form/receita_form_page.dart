@@ -6,7 +6,6 @@ import '../../../../shareds/widgets/dialog_custom.dart';
 import '../../../../shareds/widgets/text_form_field_custom.dart';
 import '../../model/receita.dart';
 import '../../widget/receita_dots.dart';
-import '../list/receita_list_controller.dart';
 import 'form_ingrediente/receita_form_ingrediente_page.dart';
 import 'form_modo_preparo/receita_form_modo_preparo_page.dart';
 import 'receita_form_controller.dart';
@@ -110,18 +109,19 @@ class _ReceitaFormPageState
   void onPressedSaveReceita() {
     DialogCustom.showProgress(context);
     controller.save().then((response) {
-      var receitaListController = Modular.get<ReceitaListController>();
-      receitaListController.update();
+      // var receitaListController = Modular.get<ReceitaListController>();
+      // receitaListController.update();
 
       Navigator.pop(context);
-      Modular.to.pop(true);
+      // Modular.to.pop(true);
     }).catchError((error) {
+      print(error);
       Navigator.pop(context);
-      DialogCustom.showAlertDialogUtil(
-        context,
-        "Atenção",
-        error,
-      );
+      // DialogCustom.showAlertDialogUtil(
+      //   context,
+      //   "Atenção",
+      //   error,
+      // );
     });
   }
 

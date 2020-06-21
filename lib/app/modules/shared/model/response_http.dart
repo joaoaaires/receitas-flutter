@@ -41,6 +41,7 @@ class ResponseHttp<T> {
       "trace": trace,
       "message": message,
       "path": path,
+      "data" : data,
     };
   }
 

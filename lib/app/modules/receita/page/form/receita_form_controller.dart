@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 
+import '../../../shared/helper/client_http_helper.dart';
+import '../../../shared/model/response_http.dart';
 import '../../model/ingrediente.dart';
 import '../../model/modo_preparo.dart';
 import '../../model/receita.dart';
-import '../../repository/ingrediente_repository.dart';
-import '../../repository/modo_preparo_repository.dart';
-import '../../repository/receita_repository.dart';
 
 part 'receita_form_controller.g.dart';
 
@@ -14,23 +13,14 @@ class ReceitaFormController = _ReceitaFormControllerBase
     with _$ReceitaFormController;
 
 abstract class _ReceitaFormControllerBase with Store {
-  final ReceitaRepository receitaRepository;
-  final IngredienteRepository ingredienteRepository;
-  final ModoPreparoRepository modoPreparoRepository;
+  final ClientHttpHelper _clientHttpHelper;
 
-  _ReceitaFormControllerBase(
-    this.receitaRepository,
-    this.ingredienteRepository,
-    this.modoPreparoRepository,
-  );
-
-  Receita receita = Receita();
-  List<Ingrediente> ingredientesDel = <Ingrediente>[];
-  List<ModoPreparo> modosPreparoDel = <ModoPreparo>[];
+  _ReceitaFormControllerBase(this._clientHttpHelper);
 
   int currentyIndex = 0;
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
+  Receita receita = Receita();
   @observable
   ObservableList<Ingrediente> ingredientes = <Ingrediente>[].asObservable();
   @observable
@@ -43,7 +33,6 @@ abstract class _ReceitaFormControllerBase with Store {
 
   @action
   void delIngrediente(Ingrediente ingrediente) {
-    ingredientesDel.add(ingrediente);
     ingredientes.remove(ingrediente);
   }
 
@@ -54,24 +43,23 @@ abstract class _ReceitaFormControllerBase with Store {
 
   @action
   void delModoPreparo(ModoPreparo modoPreparo) {
-    modosPreparoDel.add(modoPreparo);
     modosPreparo.remove(modoPreparo);
   }
 
   Future<Null> load() async {
-    if (receita.id != null && receita.id != 0) {
-      var ingredientes = await ingredienteRepository.readByIdReceita(
-        receita.id,
-      );
-      this.ingredientes = ingredientes.asObservable();
-    }
+    // if (receita.id != null && receita.id != 0) {
+    //   var ingredientes = await ingredienteRepository.readByIdReceita(
+    //     receita.id,
+    //   );
+    //   this.ingredientes = ingredientes.asObservable();
+    // }
 
-    if (receita.id != null && receita.id != 0) {
-      var modosPreparo = await modoPreparoRepository.readByIdReceita(
-        receita.id,
-      );
-      this.modosPreparo = modosPreparo.asObservable();
-    }
+    // if (receita.id != null && receita.id != 0) {
+    //   var modosPreparo = await modoPreparoRepository.readByIdReceita(
+    //     receita.id,
+    //   );
+    //   this.modosPreparo = modosPreparo.asObservable();
+    // }
   }
 
   Future<Null> save() async {
@@ -79,78 +67,62 @@ abstract class _ReceitaFormControllerBase with Store {
       throw "Alguns campos são obrigatórios.";
     }
 
-    if (ingredientes.isEmpty) {
+    if (this.ingredientes.isEmpty) {
       throw "Por favor insira pelo menos um ingrediente.";
     }
 
-    if (modosPreparo.isEmpty) {
+    if (this.modosPreparo.isEmpty) {
       throw "Por favor insira pelo menos um modo de preparo.";
     }
 
     formKey.currentState.save();
 
+    ResponseHttp responseHttp;
+    var json = receita.toJson();
+    json['ingredientes'] = this
+        .ingredientes
+        .map(
+          (element) => element.toJson(),
+        )
+        .toList();
+    json['modosPreparo'] = this
+        .modosPreparo
+        .map(
+          (element) => element.toJson(),
+        )
+        .toList();
+
     if (receita.id != null && receita.id != 0) {
-      receita.id = await receitaRepository.update(receita);
-      print("receita editada! id: ${receita.id}");
+      responseHttp = await _clientHttpHelper.put(
+        '/receita',
+        json,
+      );
     } else {
-      receita.id = await receitaRepository.create(receita);
-      print("receita cadastrada! id: ${receita.id}");
+      responseHttp = await _clientHttpHelper.post(
+        '/receita',
+        json,
+      );
     }
 
-    if (receita.id == 0) return;
-
-    for (var ingrediente in ingredientes) {
-      if (ingrediente.id == null || ingrediente.id == 0) {
-        try {
-          ingrediente.idreceita = receita.id;
-          var id = await ingredienteRepository.create(
-            ingrediente,
-          );
-          print("ingrediente cadastrada! id: $id");
-        } on Exception catch (e) {
-          print(e);
-        }
-      }
+    if (!responseHttp.isOk()) {
+      var msg = responseHttp.message ?? 'Ops, encontramos um erro!';
+      throw msg;
     }
 
-    for (var modoPreparo in modosPreparo) {
-      if (modoPreparo.id == null || modoPreparo.id == 0) {
-        try {
-          modoPreparo.idreceita = receita.id;
-          var id = await modoPreparoRepository.create(
-            modoPreparo,
-          );
-          print("modo de preparo cadastrada! id: $id");
-        } on Exception catch (e) {
-          print(e);
-        }
-      }
+    var data = responseHttp.data;
+    var validData = !(data != null && data is Map);
+    if (validData) {
+      throw FormatException('Ops, encontramos um erro!');
     }
 
-    for (var ingrediente in ingredientesDel) {
-      if (ingrediente.id != null && ingrediente.id != 0) {
-        try {
-          await ingredienteRepository.delete(
-            ingrediente.id,
-          );
-          print("ingrediente deletada! id: ${ingrediente.id}");
-        } on Exception catch (e) {
-          print(e);
-        }
-      }
-    }
-
-    for (var modoPreparo in modosPreparoDel) {
-      if (modoPreparo.id != null && modoPreparo.id != 0) {
-        try {
-          await modoPreparoRepository.delete(
-            modoPreparo.id,
-          );
-          print("modo de preparo deletada! id: ${modoPreparo.id}");
-        } on Exception catch (e) {
-          print(e);
-        }
-      }
-    }
+    receita = Receita.fromMap(data);
+    var ingredientes = data['ingredientes']
+        .map((element) => Ingrediente.fromMap(element))
+        .toList();
+    this.ingredientes = ingredientes.asObservable();
+    var modosPreparo = data['modosPreparo']
+        .map((element) => ModoPreparo.fromMap(element))
+        .toList();
+    this.modosPreparo = modosPreparo.asObservable();
   }
 }

@@ -12,7 +12,8 @@ class ModoPreparoRepository {
       var id = await db.rawInsert(
         "INSERT INTO modopreparo (idreceita, descricao) VALUES (?, ?);",
         [
-          modoPreparo.idreceita,
+          // modoPreparo.idreceita,
+          0,
           modoPreparo.descricao,
         ],
       );

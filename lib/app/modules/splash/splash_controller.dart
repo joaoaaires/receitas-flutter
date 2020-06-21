@@ -14,9 +14,8 @@ class SplashController {
     var database = await _halper.database;
     print("database ok! ${database != null}");
 
-    await _client.post(
-      "/usuario/auth",
-      {},
+    await _client.get(
+      "/receita",
     );
   }
 }

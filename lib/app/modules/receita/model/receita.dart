@@ -11,4 +11,12 @@ class Receita {
     id = map["id"];
     titulo = map["titulo"];
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      "id": id,
+      "titulo": titulo,
+    };
+  }
+
 }
