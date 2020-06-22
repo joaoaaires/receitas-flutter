@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
-import '../../../../shared/utils/validator/validator.dart';
-import '../../../../shared/widgets/buttom_custom.dart';
-import '../../../../shared/widgets/text_form_field_custom.dart';
+import '../../../../shared/util/validator/validator.dart';
+import '../../../../shared/widget/buttom_custom.dart';
+import '../../../../shared/widget/text_form_field_custom.dart';
 import '../../../model/modo_preparo.dart';
 import '../receita_form_controller.dart';
 

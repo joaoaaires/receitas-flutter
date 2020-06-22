@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
-import '../../../shared/widgets/buttom_custom.dart';
-import '../../../shared/widgets/dialog_custom.dart';
+import '../../../shared/widget/buttom_custom.dart';
+import '../../../shared/widget/dialog_custom.dart';
 import '../../model/ingrediente.dart';
 import '../../model/modo_preparo.dart';
 import '../../model/receita.dart';
