@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:receitas/app/modules/shared/widget/dialog_custom.dart';
 
 import '../../../shared/util/validator/validator.dart';
+import '../../../shared/widget/dialog_custom.dart';
 import '../../../shared/widget/text_form_field_custom.dart';
 import 'change_passwd_controller.dart';
 

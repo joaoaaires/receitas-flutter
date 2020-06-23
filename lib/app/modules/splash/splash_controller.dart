@@ -7,13 +7,18 @@ class SplashController {
 
   SplashController(this._halper, this._client);
 
-  Future<Null> loading() async {
-    //CARREGAR BANCO DE DADOS
+  Future<bool> loading() async {
     var database = await _halper.database;
     print("database ok! ${database != null}");
 
-    await _client.get(
+    var responseHttp = await _client.get(
       "/receita",
     );
+
+    if (responseHttp.isOk()) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

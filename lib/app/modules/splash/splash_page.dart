@@ -13,7 +13,6 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends ModularState<SplashPage, SplashController> {
-
   final _splashController = Modular.get<SplashController>();
 
   @override
@@ -21,7 +20,11 @@ class _SplashPageState extends ModularState<SplashPage, SplashController> {
     super.initState();
     SchedulerBinding.instance.addPostFrameCallback((_) {
       _splashController.loading().then((response) {
-        Modular.to.pushReplacementNamed("/usuario/change");
+        if (response) {
+          Modular.to.pushReplacementNamed("/home");
+        } else {
+          Modular.to.pushReplacementNamed("/usuario/signin");
+        }
       });
     });
   }

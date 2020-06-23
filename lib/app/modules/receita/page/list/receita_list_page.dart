@@ -66,6 +66,19 @@ class _ReceitaListPageState extends State<ReceitaListPage> {
           builder: (_) {
             var showCampoPesquisa = _receitaListController.showCampoPesquisa;
             if (showCampoPesquisa) {
+              return SizedBox.shrink();
+            } else {
+              return IconButton(
+                onPressed: () => Modular.to.pushNamed("/usuario/change"),
+                icon: Icon(Icons.lock_outline),
+              );
+            }
+          },
+        ),
+        Observer(
+          builder: (_) {
+            var showCampoPesquisa = _receitaListController.showCampoPesquisa;
+            if (showCampoPesquisa) {
               return IconButton(
                 onPressed: _receitaListController.showPesquisa,
                 icon: Icon(Icons.close),
