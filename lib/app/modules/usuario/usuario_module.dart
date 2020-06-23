@@ -13,7 +13,9 @@ import 'usuario_controller.dart';
 class UsuarioModule extends ChildModule {
   @override
   List<Bind> get binds => [
-        Bind((i) => ChangePasswdController()),
+        Bind((i) => ChangePasswdController(
+              i.get<ClientHttpHelper>(),
+            )),
         Bind((i) => UsuarioController(
               i.get<ClientHttpHelper>(),
               i.get<SharedPreferencesHelper>(),

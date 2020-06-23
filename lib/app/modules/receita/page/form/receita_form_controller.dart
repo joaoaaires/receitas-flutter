@@ -105,14 +105,14 @@ abstract class _ReceitaFormControllerBase with Store {
     }
 
     if (!responseHttp.isOk()) {
-      var msg = responseHttp.message ?? 'Ops, encontramos um erro!';
+      var msg = responseHttp.message ?? 'Ops, encontramos um erro! [1]';
       throw msg;
     }
 
     var data = responseHttp.data;
     var validData = !(data != null && data is Map);
     if (validData) {
-      throw FormatException('Ops, encontramos um erro!');
+      throw FormatException('Ops, encontramos um erro! [2]');
     }
 
     receita = Receita.fromMap(data);

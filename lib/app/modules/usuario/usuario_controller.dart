@@ -30,14 +30,14 @@ abstract class _UsuarioControllerBase with Store {
     );
 
     if (!responseHttp.isOk()) {
-      var msg = responseHttp.message ?? 'Ops, encontramos um erro!';
+      var msg = responseHttp.message ?? 'Ops, encontramos um erro! [3]';
       throw FormatException(msg);
     }
 
     var data = responseHttp.data;
     var validData = !(data != null && data is Map);
     if (validData) {
-      throw FormatException('Ops, encontramos um erro!');
+      throw FormatException('Ops, encontramos um erro! [4]');
     }
 
     var usuarioResponse = UsuarioResponse.fromJson(data);
@@ -53,14 +53,14 @@ abstract class _UsuarioControllerBase with Store {
     );
 
     if (!responseHttp.isOk()) {
-      var msg = responseHttp.message ?? 'Ops, encontramos um erro!';
+      var msg = responseHttp.message ?? 'Ops, encontramos um erro! [5]';
       throw FormatException(msg);
     }
 
     var data = responseHttp.data;
     var validData = !(data != null && data is bool);
     if (validData) {
-      throw FormatException('Ops, encontramos um erro!');
+      throw FormatException('Ops, encontramos um erro! [6]');
     }
 
     if (!data) {
