@@ -13,13 +13,12 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends ModularState<SplashPage, SplashController> {
-  final _splashController = Modular.get<SplashController>();
 
   @override
   void initState() {
     super.initState();
     SchedulerBinding.instance.addPostFrameCallback((_) {
-      _splashController.loading().then((response) {
+      controller.loading().then((response) {
         if (response) {
           Modular.to.pushReplacementNamed("/home");
         } else {

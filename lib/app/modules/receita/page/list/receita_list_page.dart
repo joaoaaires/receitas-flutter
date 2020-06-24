@@ -16,14 +16,11 @@ class ReceitaListPage extends StatefulWidget {
   _ReceitaListPageState createState() => _ReceitaListPageState();
 }
 
-class _ReceitaListPageState extends State<ReceitaListPage> {
-  ReceitaListController _receitaListController;
-
+class _ReceitaListPageState
+    extends ModularState<ReceitaListPage, ReceitaListController> {
   @override
   void initState() {
     super.initState();
-    _receitaListController = Modular.get<ReceitaListController>();
-    //ca-app-pub-3698978879549955/3613339277
   }
 
   @override
@@ -38,11 +35,11 @@ class _ReceitaListPageState extends State<ReceitaListPage> {
     return AppBar(
       title: Observer(
         builder: (_) {
-          var showCampoPesquisa = _receitaListController.showCampoPesquisa;
+          var showCampoPesquisa = controller.showCampoPesquisa;
           return showCampoPesquisa
               ? TextField(
                   autofocus: true,
-                  controller: _receitaListController.textEditingController,
+                  controller: controller.textEditingController,
                   decoration: const InputDecoration(
                     hintText: "Pesquisar",
                     border: InputBorder.none,
@@ -64,7 +61,7 @@ class _ReceitaListPageState extends State<ReceitaListPage> {
       actions: <Widget>[
         Observer(
           builder: (_) {
-            var showCampoPesquisa = _receitaListController.showCampoPesquisa;
+            var showCampoPesquisa = controller.showCampoPesquisa;
             if (showCampoPesquisa) {
               return SizedBox.shrink();
             } else {
@@ -77,15 +74,15 @@ class _ReceitaListPageState extends State<ReceitaListPage> {
         ),
         Observer(
           builder: (_) {
-            var showCampoPesquisa = _receitaListController.showCampoPesquisa;
+            var showCampoPesquisa = controller.showCampoPesquisa;
             if (showCampoPesquisa) {
               return IconButton(
-                onPressed: _receitaListController.showPesquisa,
+                onPressed: controller.showPesquisa,
                 icon: Icon(Icons.close),
               );
             } else {
               return IconButton(
-                onPressed: _receitaListController.showPesquisa,
+                onPressed: controller.showPesquisa,
                 icon: Icon(Icons.search),
               );
             }
@@ -98,24 +95,24 @@ class _ReceitaListPageState extends State<ReceitaListPage> {
   Widget getBody() {
     return Observer(
       builder: (_) {
-        if (_receitaListController.receitas.error != null) {
+        if (controller.receitas.error != null) {
           return Center(
             child: Text("Não foi possível carregar receitas!"),
           );
         }
 
-        if (_receitaListController.receitas.value == null) {
+        if (controller.receitas.value == null) {
           return Center(
             child: CircularProgressIndicator(),
           );
         }
 
-        List<Receita> receitas = _receitaListController.receitas.value;
+        List<Receita> receitas = controller.receitas.value;
 
         var size = receitas.length;
         var isEmpty = receitas.isEmpty;
 
-        if (_receitaListController.showCampoPesquisa) {
+        if (controller.showCampoPesquisa) {
           if (isEmpty) size = size + 1;
 
           return ListView.builder(
@@ -250,7 +247,7 @@ class _ReceitaListPageState extends State<ReceitaListPage> {
 
     return Observer(
       builder: (_) {
-        var height = _receitaListController.height;
+        var height = controller.height;
         return Padding(
           padding: EdgeInsets.only(top: height == 0 ? 0 : 8.0),
           child: Material(
@@ -263,8 +260,8 @@ class _ReceitaListPageState extends State<ReceitaListPage> {
                 borderRadius: borderRadius,
                 child: NativeAdmob(
                   // Your ad unit id
-                  adUnitID: _receitaListController.adUnitID,
-                  controller: _receitaListController.nativeAdmobController,
+                  adUnitID: controller.adUnitID,
+                  controller: controller.nativeAdmobController,
                   type: NativeAdmobType.banner,
                 ),
               ),
