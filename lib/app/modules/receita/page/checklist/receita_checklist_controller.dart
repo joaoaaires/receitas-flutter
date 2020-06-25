@@ -1,5 +1,6 @@
 import 'package:mobx/mobx.dart';
 
+import '../../../shared/helper/client_http_helper.dart';
 import '../../model/ingrediente.dart';
 import '../../model/modo_preparo.dart';
 import '../../model/receita.dart';
@@ -24,11 +25,13 @@ abstract class _ReceitaChecklistControllerBase with Store {
   ObservableList<ReceitaChecklistItemController> checklistItens =
       <ReceitaChecklistItemController>[].asObservable();
 
+  final ClientHttpHelper clientHttpHelper;
   final ReceitaRepository receitaRepository;
   final IngredienteRepository ingredienteRepository;
   final ModoPreparoRepository modoPreparoRepository;
 
   _ReceitaChecklistControllerBase(
+    this.clientHttpHelper,
     this.receitaRepository,
     this.ingredienteRepository,
     this.modoPreparoRepository,
@@ -62,9 +65,14 @@ abstract class _ReceitaChecklistControllerBase with Store {
   Future<void> delete() async {
     if (receita != null) {
       if (receita.id != null && receita.id != 0) {
-        await modoPreparoRepository.deleteByIdReceita(receita.id);
-        await ingredienteRepository.deleteByIdReceita(receita.id);
-        await receitaRepository.delete(receita.id);
+        var responseHttp = await clientHttpHelper.delete(
+          "/receita/${receita.idserver ?? 0}",
+        );
+        if (responseHttp.isOk()) {
+          await modoPreparoRepository.deleteByIdReceita(receita.id);
+          await ingredienteRepository.deleteByIdReceita(receita.id);
+          await receitaRepository.delete(receita.id);
+        }
       }
     }
   }

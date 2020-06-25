@@ -10,10 +10,12 @@ class ModoPreparoRepository {
     try {
       var db = await _helper.database;
       var id = await db.rawInsert(
-        "INSERT INTO modopreparo (idreceita, descricao) VALUES (?, ?);",
+        '''
+        INSERT INTO modopreparo (idserver, idreceita, descricao) VALUES (?, ?, ?);
+        ''',
         [
-          // modoPreparo.idreceita,
-          0,
+          modoPreparo.idserver,
+          modoPreparo.idreceita,
           modoPreparo.descricao,
         ],
       );
@@ -29,10 +31,10 @@ class ModoPreparoRepository {
       var modosPreparo = <ModoPreparo>[];
       var db = await _helper.database;
       List<Map> result = await db.rawQuery('''
-          SELECT id, idreceita, descricao FROM modopreparo WHERE idreceita = ?;
+          SELECT id, idserver, idreceita, descricao FROM modopreparo WHERE idreceita = ?;
           ''', [idreceita]);
       for (var map in result) {
-        modosPreparo.add(ModoPreparo.fromMap(map));
+        modosPreparo.add(ModoPreparo.fromMapSql(map));
       }
       return modosPreparo;
     } on Exception catch (e) {
@@ -41,7 +43,41 @@ class ModoPreparoRepository {
     }
   }
 
-  //update
+  Future<ModoPreparo> readByIdServer(int idserver) async {
+    try {
+      var db = await _helper.database;
+      List<Map> result = await db.rawQuery('''
+          SELECT id, idserver, idreceita, descricao FROM modopreparo WHERE idserver = ?;
+          ''', [idserver]);
+      return result != null && result.isNotEmpty
+          ? ModoPreparo.fromMapSql(result[0])
+          : null;
+    } on Exception catch (e) {
+      print(e);
+      throw "Não é possível buscar modos de preparo.";
+    }
+  }
+
+  Future<int> update(ModoPreparo modoPreparo) async {
+    try {
+      var db = await _helper.database;
+      await db.rawUpdate(
+        '''
+        UPDATE modopreparo SET idserver = ?, idreceita = ?, descricao = ? WHERE id = ?;
+        ''',
+        [
+          modoPreparo.idserver,
+          modoPreparo.idreceita,
+          modoPreparo.descricao,
+          modoPreparo.id,
+        ],
+      );
+      return modoPreparo.id;
+    } on Exception catch (e) {
+      print(e);
+      throw "Não foi possível criar ingrediente.";
+    }
+  }
 
   Future<Null> delete(int id) async {
     try {

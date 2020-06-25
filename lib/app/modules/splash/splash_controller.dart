@@ -1,3 +1,4 @@
+import '../receita/service/receita_load_service.dart';
 import '../shared/helper/client_http_helper.dart';
 import '../shared/helper/database_helper.dart';
 
@@ -16,6 +17,14 @@ class SplashController {
     );
 
     if (responseHttp.isOk()) {
+      var data = responseHttp.data;
+      var validData = !(data != null && data is List);
+      if (validData) {
+        throw FormatException('Ops, encontramos um erro! [2]');
+      }
+
+      var service = ReceitaLoadService(_halper);
+      await service.update(data);
       return true;
     } else {
       return false;

@@ -18,10 +18,6 @@ class ReceitaListPage extends StatefulWidget {
 
 class _ReceitaListPageState
     extends ModularState<ReceitaListPage, ReceitaListController> {
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {

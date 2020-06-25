@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 import '../shared/helper/client_http_helper.dart';
+import '../shared/helper/database_helper.dart';
 import '../shared/helper/shared_preferences_helper.dart';
 import 'page/change_passwd/change_passwd_controller.dart';
 import 'page/change_passwd/change_passwd_page.dart';
@@ -17,6 +18,7 @@ class UsuarioModule extends ChildModule {
               i.get<ClientHttpHelper>(),
             )),
         Bind((i) => UsuarioController(
+              i.get<DatabaseHelper>(),
               i.get<ClientHttpHelper>(),
               i.get<SharedPreferencesHelper>(),
             )),

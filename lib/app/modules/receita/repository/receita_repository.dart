@@ -10,8 +10,9 @@ class ReceitaRepository {
     try {
       var db = await _helper.database;
       var id = await db.rawInsert(
-        "INSERT INTO receita (titulo) VALUES (?);",
+        "INSERT INTO receita (idserver, titulo) VALUES (?, ?);",
         [
+          receita.idserver,
           receita.titulo,
         ],
       );
@@ -27,10 +28,10 @@ class ReceitaRepository {
       var receitas = <Receita>[];
       var db = await _helper.database;
       List<Map> result = await db.rawQuery(
-        "SELECT id, titulo FROM receita ORDER BY titulo;",
+        "SELECT id, idserver, titulo FROM receita ORDER BY titulo;",
       );
       for (var map in result) {
-        receitas.add(Receita.fromMap(map));
+        receitas.add(Receita.fromMapSql(map));
       }
       return receitas;
     } on Exception catch (e) {
@@ -43,11 +44,11 @@ class ReceitaRepository {
     try {
       var receitas = <Receita>[];
       var db = await _helper.database;
-      List<Map> result = await db.rawQuery(
-          "SELECT id, titulo FROM receita WHERE titulo like ? ORDER BY titulo;",
-          ["%$titulo%"]);
+      List<Map> result = await db.rawQuery('''
+          SELECT id, idserver, titulo FROM receita WHERE titulo like ? ORDER BY titulo;
+          ''', ["%$titulo%"]);
       for (var map in result) {
-        receitas.add(Receita.fromMap(map));
+        receitas.add(Receita.fromMapSql(map));
       }
       return receitas;
     } on Exception catch (e) {
@@ -60,13 +61,31 @@ class ReceitaRepository {
     try {
       var db = await _helper.database;
       List<Map> result = await db.rawQuery(
-        "SELECT id, titulo FROM receita WHERE id = ?;",
+        "SELECT id, idserver, titulo FROM receita WHERE id = ?;",
         [
           id,
         ],
       );
       return result != null && result.isNotEmpty
-          ? Receita.fromMap(result[0])
+          ? Receita.fromMapSql(result[0])
+          : null;
+    } on Exception catch (e) {
+      print(e);
+      throw "Não foi possível recuperar receitas";
+    }
+  }
+
+  Future<Receita> readByIdServer(int id) async {
+    try {
+      var db = await _helper.database;
+      List<Map> result = await db.rawQuery(
+        "SELECT id, idserver, titulo FROM receita WHERE idserver = ?;",
+        [
+          id,
+        ],
+      );
+      return result != null && result.isNotEmpty
+          ? Receita.fromMapSql(result[0])
           : null;
     } on Exception catch (e) {
       print(e);
@@ -77,9 +96,10 @@ class ReceitaRepository {
   Future<int> update(Receita receita) async {
     try {
       var db = await _helper.database;
-      await db.rawInsert(
-        "UPDATE receita SET titulo = ? WHERE id = ?;",
+      await db.rawUpdate(
+        "UPDATE receita SET idserver = ?, titulo = ? WHERE id = ?;",
         [
+          receita.idserver,
           receita.titulo,
           receita.id,
         ],

@@ -11,7 +11,12 @@ import 'receita_form_page.dart';
 class ReceitaFormModule extends ChildModule {
   @override
   List<Bind> get binds => [
-        Bind((i) => ReceitaFormController(i.get<ClientHttpHelper>())),
+        Bind((i) => ReceitaFormController(
+              i.get<ClientHttpHelper>(),
+              i.get<ReceitaRepository>(),
+              i.get<IngredienteRepository>(),
+              i.get<ModoPreparoRepository>(),
+            )),
         Bind((i) => ModoPreparoRepository(i.get<DatabaseHelper>())),
         Bind((i) => IngredienteRepository(i.get<DatabaseHelper>())),
         Bind((i) => ReceitaRepository(i.get<DatabaseHelper>())),

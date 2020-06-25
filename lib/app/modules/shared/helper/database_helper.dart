@@ -33,7 +33,7 @@ class DatabaseHelper {
     await db.execute(
       '''
       CREATE TABLE IF NOT EXISTS receita (
-          idpda INTEGER PRIMARY KEY AUTOINCREMENT,
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
           idserver INT,
           titulo TEXT NOT NULL
       );
@@ -42,9 +42,9 @@ class DatabaseHelper {
     await db.execute(
       '''
       CREATE TABLE IF NOT EXISTS ingrediente (
-          idpda INTEGER PRIMARY KEY AUTOINCREMENT,
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
           idserver INT,
-          idpdareceita INT NOT NULL,
+          idreceita INT NOT NULL,
           descricao TEXT
       );
       ''',
@@ -52,9 +52,9 @@ class DatabaseHelper {
     await db.execute(
       '''
       CREATE TABLE IF NOT EXISTS modopreparo (
-          idpda INTEGER PRIMARY KEY AUTOINCREMENT,
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
           idserver INT,
-          idpdareceita INT NOT NULL,                    
+          idreceita INT NOT NULL,                    
           descricao TEXT
       );
       ''',
