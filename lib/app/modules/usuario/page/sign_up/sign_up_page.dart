@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:receitas/app/modules/shared/widget/logo_custom.dart';
 
 import '../../../shared/util/validator/validator.dart';
 import '../../../shared/widget/dialog_custom.dart';
+import '../../../shared/widget/logo_custom.dart';
 import '../../../shared/widget/text_form_field_custom.dart';
 import '../../model/usuario_form.dart';
 import '../../usuario_controller.dart';
