@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:receitas/app/modules/shared/widget/logo_custom.dart';
 
 import '../../../shared/util/validator/validator.dart';
 import '../../../shared/widget/dialog_custom.dart';
@@ -18,6 +19,7 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends ModularState<SignUpPage, UsuarioController> {
+  Color colorLogo;
   bool isLoading = false;
   double statusBarHeight;
   final UsuarioForm _usuarioForm = UsuarioForm();
@@ -31,6 +33,7 @@ class _SignUpPageState extends ModularState<SignUpPage, UsuarioController> {
 
   @override
   Widget build(BuildContext context) {
+    colorLogo = Theme.of(context).primaryColor;
     statusBarHeight = MediaQuery.of(context).padding.top;
     return Scaffold(
       body: getBody(),
@@ -52,6 +55,8 @@ class _SignUpPageState extends ModularState<SignUpPage, UsuarioController> {
                   key: _formKey,
                   child: Column(
                     children: <Widget>[
+                      LogoCustom(color: colorLogo),
+                      SizedBox(height: 8),
                       _getForm(),
                       SizedBox(height: 8),
                       _getButton(),

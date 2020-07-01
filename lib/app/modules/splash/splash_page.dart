@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+
+import '../shared/widget/logo_custom.dart';
 import 'splash_controller.dart';
 
 class SplashPage extends StatefulWidget {
@@ -13,7 +15,6 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends ModularState<SplashPage, SplashController> {
-
   @override
   void initState() {
     super.initState();
@@ -42,40 +43,15 @@ class _SplashPageState extends ModularState<SplashPage, SplashController> {
             decoration: BoxDecoration(color: Theme.of(context).primaryColor),
           ),
           Column(
-            mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Expanded(
                 flex: 2,
-                child: Container(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      CircleAvatar(
-                        backgroundColor: Colors.white,
-                        radius: 50.0,
-                        child: Icon(
-                          Icons.shopping_cart,
-                          size: 50.0,
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 10.0),
-                      ),
-                      Text(
-                        "Shopping!",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 24.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                child: LogoCustom(),
               ),
               Expanded(
                 flex: 1,
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     CircularProgressIndicator(
