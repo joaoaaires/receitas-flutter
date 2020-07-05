@@ -12,9 +12,8 @@ class FirebaseAuthErrorHelper {
       case 'ERROR_USER_DISABLED':
         return 'O email inserido está inativado.';
       case 'ERROR_TOO_MANY_REQUESTS':
-        return '''
-          Muitas tentativas para esse e-mail, espere alguns minutos e tente novamente.
-        ''';
+        return '''Muitas tentativas para esse e-mail,\n
+        espere alguns minutos e tente novamente.''';
       case 'ERROR_OPERATION_NOT_ALLOWED':
         return 'O email inserido está inativado.';
       case 'ERROR_WEAK_PASSWORD':
