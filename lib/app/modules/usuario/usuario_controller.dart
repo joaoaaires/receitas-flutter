@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 import 'package:mobx/mobx.dart';
 
+import '../shared/helper/firebase_auth_error_helper.dart';
 import '../shared/helper/shared_preferences_helper.dart';
 import 'model/usuario_form.dart';
 
@@ -25,29 +27,31 @@ abstract class _UsuarioControllerBase with Store {
   }
 
   Future<Null> _sign(String path, UsuarioForm usuarioForm) async {
+    String errorCode;
     FirebaseUser firebaseUser;
     var isSignIn = path.contains('/usuario/auth');
 
-    if (isSignIn) {
-      var firebaseAuth = await _firebaseAuth.signInWithEmailAndPassword(
-        email: usuarioForm.email,
-        password: usuarioForm.senha,
-      );
-      firebaseUser = firebaseAuth.user;
-    } else {
-      var firebaseAuth = await _firebaseAuth.createUserWithEmailAndPassword(
-        email: usuarioForm.email,
-        password: usuarioForm.senha,
-      );
-      firebaseUser = firebaseAuth.user;
+    try {
+      if (isSignIn) {
+        var firebaseAuth = await _firebaseAuth.signInWithEmailAndPassword(
+          email: usuarioForm.email,
+          password: usuarioForm.senha,
+        );
+        firebaseUser = firebaseAuth.user;
+      } else {
+        var firebaseAuth = await _firebaseAuth.createUserWithEmailAndPassword(
+          email: usuarioForm.email,
+          password: usuarioForm.senha,
+        );
+        firebaseUser = firebaseAuth.user;
+      }
+    } on PlatformException catch (e) {
+      errorCode = e.code;
     }
 
-    if (firebaseUser == null) {
-      if (isSignIn) {
-        throw FormatException('Não foi possível realizar login.');
-      } else {
-        throw FormatException('Não foi possível realizar cadastrado.');
-      }
+    if (errorCode != null) {
+      var msg = FirebaseAuthErrorHelper.getError(errorCode);
+      throw FormatException(msg);
     }
 
     await _sharedPreferencesHelper.setId(firebaseUser.uid);
