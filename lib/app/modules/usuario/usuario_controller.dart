@@ -55,27 +55,7 @@ abstract class _UsuarioControllerBase with Store {
   }
 
   Future<String> forgot(UsuarioForm usuarioForm) async {
-    // var responseHttp = await _clientHttpHelper.post(
-    //   '/usuario/forgot',
-    //   usuarioForm.toJson(),
-    // );
-
-    // if (!responseHttp.isOk()) {
-    //   var msg = responseHttp.message ?? 'Ops, encontramos um erro! [5]';
-    //   throw FormatException(msg);
-    // }
-
-    // var data = responseHttp.data;
-    // var validData = !(data != null && data is bool);
-    // if (validData) {
-    //   throw FormatException('Ops, encontramos um erro! [6]');
-    // }
-
-    // if (!data) {
-    //   throw FormatException('Houve erro ao gerar nova senha!');
-    // }
-
-    // return responseHttp.message;
-    return null;
+    await _firebaseAuth.sendPasswordResetEmail(email: usuarioForm.email);
+    return "E-mail enviado!";
   }
 }

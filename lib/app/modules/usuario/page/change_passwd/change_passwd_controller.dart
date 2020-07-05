@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mobx/mobx.dart';
 
 part 'change_passwd_controller.g.dart';
