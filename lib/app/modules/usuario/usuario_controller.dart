@@ -1,24 +1,18 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mobx/mobx.dart';
 
-import '../receita/service/receita_load_service.dart';
-import '../shared/helper/client_http_helper.dart';
-import '../shared/helper/database_helper.dart';
 import '../shared/helper/shared_preferences_helper.dart';
 import 'model/usuario_form.dart';
-import 'model/usuario_response.dart';
 
 part 'usuario_controller.g.dart';
 
 class UsuarioController = _UsuarioControllerBase with _$UsuarioController;
 
 abstract class _UsuarioControllerBase with Store {
-  final DatabaseHelper _databaseHelper;
-  final ClientHttpHelper _clientHttpHelper;
   final SharedPreferencesHelper _sharedPreferencesHelper;
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
   _UsuarioControllerBase(
-    this._databaseHelper,
-    this._clientHttpHelper,
     this._sharedPreferencesHelper,
   );
 
@@ -31,67 +25,57 @@ abstract class _UsuarioControllerBase with Store {
   }
 
   Future<Null> _sign(String path, UsuarioForm usuarioForm) async {
-    var responseHttp = await _clientHttpHelper.post(
-      path,
-      usuarioForm.toJson(),
-    );
+    FirebaseUser firebaseUser;
+    var isSignIn = path.contains('/usuario/auth');
 
-    if (!responseHttp.isOk()) {
-      var msg = responseHttp.message ?? 'Ops, encontramos um erro! [3]';
-      throw FormatException(msg);
+    if (isSignIn) {
+      var firebaseAuth = await _firebaseAuth.signInWithEmailAndPassword(
+        email: usuarioForm.email,
+        password: usuarioForm.senha,
+      );
+      firebaseUser = firebaseAuth.user;
+    } else {
+      var firebaseAuth = await _firebaseAuth.createUserWithEmailAndPassword(
+        email: usuarioForm.email,
+        password: usuarioForm.senha,
+      );
+      firebaseUser = firebaseAuth.user;
     }
 
-    var data = responseHttp.data;
-    var validData = !(data != null && data is Map);
-    if (validData) {
-      throw FormatException('Ops, encontramos um erro! [4]');
-    }
-
-    var usuarioResponse = UsuarioResponse.fromJson(data);
-    await _sharedPreferencesHelper.setId(usuarioResponse.id);
-    await _sharedPreferencesHelper.setNome(usuarioResponse.nome);
-    await _sharedPreferencesHelper.setEmail(usuarioResponse.email);
-
-    await configReceita();
-  }
-
-  void configReceita() async {
-    var responseHttp = await _clientHttpHelper.get(
-      "/receita",
-    );
-
-    if (responseHttp.isOk()) {
-      var data = responseHttp.data;
-      var validData = !(data != null && data is List);
-      if (validData) {
-        throw FormatException('Ops, encontramos um erro! [2]');
+    if (firebaseUser == null) {
+      if (isSignIn) {
+        throw FormatException('Não foi possível realizar login.');
+      } else {
+        throw FormatException('Não foi possível realizar cadastrado.');
       }
-      var service = ReceitaLoadService(_databaseHelper);
-      await service.update(data);
     }
+
+    await _sharedPreferencesHelper.setId(firebaseUser.uid);
+    await _sharedPreferencesHelper.setEmail(firebaseUser.email);
   }
 
   Future<String> forgot(UsuarioForm usuarioForm) async {
-    var responseHttp = await _clientHttpHelper.post(
-      '/usuario/forgot',
-      usuarioForm.toJson(),
-    );
+    // var responseHttp = await _clientHttpHelper.post(
+    //   '/usuario/forgot',
+    //   usuarioForm.toJson(),
+    // );
 
-    if (!responseHttp.isOk()) {
-      var msg = responseHttp.message ?? 'Ops, encontramos um erro! [5]';
-      throw FormatException(msg);
-    }
+    // if (!responseHttp.isOk()) {
+    //   var msg = responseHttp.message ?? 'Ops, encontramos um erro! [5]';
+    //   throw FormatException(msg);
+    // }
 
-    var data = responseHttp.data;
-    var validData = !(data != null && data is bool);
-    if (validData) {
-      throw FormatException('Ops, encontramos um erro! [6]');
-    }
+    // var data = responseHttp.data;
+    // var validData = !(data != null && data is bool);
+    // if (validData) {
+    //   throw FormatException('Ops, encontramos um erro! [6]');
+    // }
 
-    if (!data) {
-      throw FormatException('Houve erro ao gerar nova senha!');
-    }
+    // if (!data) {
+    //   throw FormatException('Houve erro ao gerar nova senha!');
+    // }
 
-    return responseHttp.message;
+    // return responseHttp.message;
+    return null;
   }
 }

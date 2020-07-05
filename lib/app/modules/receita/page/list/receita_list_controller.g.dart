@@ -29,14 +29,14 @@ mixin _$ReceitaListController on _ReceitaListControllerBase, Store {
   final _$receitasAtom = Atom(name: '_ReceitaListControllerBase.receitas');
 
   @override
-  ObservableFuture<dynamic> get receitas {
+  ObservableStream<List<Receita>> get receitas {
     _$receitasAtom.context.enforceReadPolicy(_$receitasAtom);
     _$receitasAtom.reportObserved();
     return super.receitas;
   }
 
   @override
-  set receitas(ObservableFuture<dynamic> value) {
+  set receitas(ObservableStream<List<Receita>> value) {
     _$receitasAtom.context.conditionallyRunInAction(() {
       super.receitas = value;
       _$receitasAtom.reportChanged();

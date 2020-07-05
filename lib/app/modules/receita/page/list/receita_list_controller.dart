@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_native_admob/native_admob_controller.dart';
 import 'package:mobx/mobx.dart';
+import 'package:receitas/app/modules/receita/model/receita.dart';
 
 import '../../repository/receita_repository.dart';
 
@@ -16,7 +17,7 @@ abstract class _ReceitaListControllerBase extends Disposable with Store {
   @observable
   double height = 0;
   @observable
-  ObservableFuture receitas;
+  ObservableStream<List<Receita>> receitas;
   @observable
   bool showCampoPesquisa = false;
 
@@ -47,11 +48,8 @@ abstract class _ReceitaListControllerBase extends Disposable with Store {
     update();
   }
 
-  void update() {
-    // receitas = receitaRepository.read().asObservable();
-    receitas = receitaRepository
-        .readByTitulo(textEditingController.text)
-        .asObservable();
+  void update() async {
+    receitas = (await receitaRepository.read()).asObservable();
   }
 
   void onStateChanged(AdLoadState state) {

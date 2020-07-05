@@ -1,11 +1,8 @@
 import 'package:mobx/mobx.dart';
 
-import '../../../shared/helper/client_http_helper.dart';
 import '../../model/ingrediente.dart';
 import '../../model/modo_preparo.dart';
 import '../../model/receita.dart';
-import '../../repository/ingrediente_repository.dart';
-import '../../repository/modo_preparo_repository.dart';
 import '../../repository/receita_repository.dart';
 import '../../store/receita_checklist_item_controller.dart';
 
@@ -25,55 +22,25 @@ abstract class _ReceitaChecklistControllerBase with Store {
   ObservableList<ReceitaChecklistItemController> checklistItens =
       <ReceitaChecklistItemController>[].asObservable();
 
-  final ClientHttpHelper clientHttpHelper;
   final ReceitaRepository receitaRepository;
-  final IngredienteRepository ingredienteRepository;
-  final ModoPreparoRepository modoPreparoRepository;
 
   _ReceitaChecklistControllerBase(
-    this.clientHttpHelper,
     this.receitaRepository,
-    this.ingredienteRepository,
-    this.modoPreparoRepository,
   );
 
-  Future<void> load() async {
-    if (receita != null && receita.id != null && receita.id != 0) {
-      var db = await receitaRepository.readById(
-        receita.id,
-      );
-      receita = db;
-    }
-
+  Future<void> load(Receita receita) async {
     if (receita != null) {
-      if (receita.id != null && receita.id != 0) {
-        var ingredientes = await ingredienteRepository.readByIdReceita(
-          receita.id,
-        );
-        this.ingredientes = ingredientes.asObservable();
-      }
-
-      if (receita.id != null && receita.id != 0) {
-        var modosPreparo = await modoPreparoRepository.readByIdReceita(
-          receita.id,
-        );
-        this.modosPreparo = modosPreparo.asObservable();
-      }
+      ingredientes = receita.ingredientes.asObservable();
     }
+    if (receita != null) {
+      modosPreparo = receita.modosPreparo.asObservable();
+    }
+    if (receita != null) this.receita = receita;
   }
 
   Future<void> delete() async {
-    if (receita != null) {
-      if (receita.id != null && receita.id != 0) {
-        var responseHttp = await clientHttpHelper.delete(
-          "/receita/${receita.idserver ?? 0}",
-        );
-        if (responseHttp.isOk()) {
-          await modoPreparoRepository.deleteByIdReceita(receita.id);
-          await ingredienteRepository.deleteByIdReceita(receita.id);
-          await receitaRepository.delete(receita.id);
-        }
-      }
+    if (receita.reference != null) {
+      await receitaRepository.delete(receita.reference);
     }
   }
 

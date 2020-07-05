@@ -1,34 +1,43 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+import 'ingrediente.dart';
+import 'modo_preparo.dart';
+
 class Receita {
-  int id;
-  int idserver;
   String titulo;
+  List<Ingrediente> ingredientes = [];
+  List<ModoPreparo> modosPreparo = [];
+  DocumentReference reference;
 
-  Receita({
-    this.id,
-    this.idserver,
-    this.titulo,
-  });
+  Receita();
 
-  Receita.fromMapSql(Map<String, dynamic> map) {
-    id = map["id"];
-    idserver = map["idserver"];
-    titulo = map["titulo"];
-  }
-
-  Receita.fromMapHttp(Map<String, dynamic> map) {
-    id = map["idPda"];
-    idserver = map["id"];
-    titulo = map["titulo"];
+  Receita.fromDocument(DocumentSnapshot doc) {
+    titulo = doc["titulo"];
+    var jsonIngredientes = doc["ingredientes"];
+    for (var jsonIngrediente in jsonIngredientes) {
+      ingredientes.add(Ingrediente.fromMap(jsonIngrediente));
+    }
+    var jsonModosPreparo = doc["modosPreparo"];
+    for (var jsonModoPreparo in jsonModosPreparo) {
+      modosPreparo.add(ModoPreparo.fromMap(jsonModoPreparo));
+    }
+    reference = doc.reference;
   }
 
   Map<String, dynamic> toJson() {
-    var json = {
-      "idPda": id,
+    var json = <String, dynamic>{
       "titulo": titulo,
     };
-    if (idserver != null && idserver != 0) {
-      json["id"] = idserver;
-    }
+    json['ingredientes'] = ingredientes
+        .map(
+          (element) => element.toJson(),
+        )
+        .toList();
+    json['modosPreparo'] = modosPreparo
+        .map(
+          (element) => element.toJson(),
+        )
+        .toList();
     return json;
   }
 }

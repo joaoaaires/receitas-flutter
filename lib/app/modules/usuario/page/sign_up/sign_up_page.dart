@@ -80,20 +80,6 @@ class _SignUpPageState extends ModularState<SignUpPage, UsuarioController> {
           height: statusBarHeight,
         ),
         TextFormFieldCustom(
-          labelText: "Nome",
-          keyboardType: TextInputType.text,
-          onSaved: (value) => _usuarioForm.nome = value,
-          validators: [
-            Validator.required(),
-            Validator.minLength(7),
-          ],
-          inputFormatters: [
-            LengthLimitingTextInputFormatter(255),
-            WhitelistingTextInputFormatter(RegExp("[a-zA-ZÀ-ú ]")),
-          ],
-        ),
-        SizedBox(height: 8),
-        TextFormFieldCustom(
           labelText: "E-mail",
           keyboardType: TextInputType.emailAddress,
           onSaved: (value) => _usuarioForm.email = value,

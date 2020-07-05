@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:receitas/app/modules/receita/model/ingrediente.dart';
 
 import '../../../shared/util/validator/validator.dart';
 import '../../../shared/widget/dialog_custom.dart';
@@ -22,13 +23,11 @@ class ReceitaFormPage extends StatefulWidget {
 
 class _ReceitaFormPageState
     extends ModularState<ReceitaFormPage, ReceitaFormController> {
-  Future<Null> load;
-
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     final Receita receita = ModalRoute.of(context).settings.arguments;
-    if (receita != null) controller.receita = receita;
+    controller.load(receita);
   }
 
   @override
@@ -41,7 +40,7 @@ class _ReceitaFormPageState
 
   Widget getAppBar() {
     return AppBar(
-      title: Text(controller.receita.id != null && controller.receita.id != 0
+      title: Text(controller.receita.reference != null
           ? "Editar Receita"
           : "Nova Receita"),
       backgroundColor: Colors.transparent,
@@ -58,63 +57,48 @@ class _ReceitaFormPageState
   Widget getBody() {
     const padding = 16.0;
 
-    return FutureBuilder(
-      future: loading(),
-      builder: (_, snapshot) {
-        switch (snapshot.connectionState) {
-          case ConnectionState.none:
-          case ConnectionState.active:
-          case ConnectionState.waiting:
-            return Center(child: CircularProgressIndicator());
-          default:
-            return Container(
-              width: double.infinity,
-              height: double.infinity,
-              child: Column(
-                children: <Widget>[
-                  Form(
-                    key: controller.formKey,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: padding),
-                      child: TextFormFieldCustom(
-                        labelText: "Título",
-                        initialValue: controller.receita.titulo,
-                        onSaved: (value) => controller.receita.titulo = value,
-                        validators: [Validator.required()],
-                      ),
-                    ),
-                  ),
-                  ReceitaDots(
-                    currentyIndex: controller.currentyIndex,
-                    sizePage: 2,
-                  ),
-                  Expanded(
-                    child: PageView(
-                      physics: BouncingScrollPhysics(),
-                      scrollDirection: Axis.horizontal,
-                      onPageChanged: onPageChangedPageView,
-                      children: <Widget>[
-                        ReceitaFormIngredientePage(),
-                        ReceitaFormModoPreparoPage(),
-                      ],
-                    ),
-                  ),
-                ],
+    return Container(
+      width: double.infinity,
+      height: double.infinity,
+      child: Column(
+        children: <Widget>[
+          Form(
+            key: controller.formKey,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: padding),
+              child: TextFormFieldCustom(
+                labelText: "Título",
+                initialValue: controller.receita.titulo,
+                onSaved: (value) => controller.receita.titulo = value,
+                validators: [Validator.required()],
               ),
-            );
-        }
-      },
+            ),
+          ),
+          ReceitaDots(
+            currentyIndex: controller.currentyIndex,
+            sizePage: 2,
+          ),
+          Expanded(
+            child: PageView(
+              physics: BouncingScrollPhysics(),
+              scrollDirection: Axis.horizontal,
+              onPageChanged: onPageChangedPageView,
+              children: <Widget>[
+                ReceitaFormIngredientePage(),
+                ReceitaFormModoPreparoPage(),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 
   void onPressedSaveReceita() {
     DialogCustom.showProgress(context);
     controller.save().then((response) {
-      var receitaListController = Modular.get<ReceitaListController>();
-      receitaListController.update();
-
       Navigator.pop(context);
-      Modular.to.pop(true);
+      Modular.to.pop(controller.receita);
     }).catchError((error) {
       print(error);
       Navigator.pop(context);
@@ -131,10 +115,5 @@ class _ReceitaFormPageState
     setState(() {
       controller.currentyIndex = index;
     });
-  }
-
-  Future<Null> loading() {
-    if (load == null) load = controller.load();
-    return load;
   }
 }

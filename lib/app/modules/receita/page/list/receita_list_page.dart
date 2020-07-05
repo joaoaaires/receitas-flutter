@@ -18,7 +18,6 @@ class ReceitaListPage extends StatefulWidget {
 
 class _ReceitaListPageState
     extends ModularState<ReceitaListPage, ReceitaListController> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,10 +60,11 @@ class _ReceitaListPageState
             if (showCampoPesquisa) {
               return SizedBox.shrink();
             } else {
-              return IconButton(
-                onPressed: () => Modular.to.pushNamed("/usuario/change"),
-                icon: Icon(Icons.lock_outline),
-              );
+              return SizedBox.shrink();
+              // return IconButton(
+              //   onPressed: () => Modular.to.pushNamed("/usuario/change"),
+              //   icon: Icon(Icons.lock_outline),
+              // );
             }
           },
         ),
@@ -77,10 +77,11 @@ class _ReceitaListPageState
                 icon: Icon(Icons.close),
               );
             } else {
-              return IconButton(
-                onPressed: controller.showPesquisa,
-                icon: Icon(Icons.search),
-              );
+              return SizedBox.shrink();
+              // return IconButton(
+              //   onPressed: controller.showPesquisa,
+              //   icon: Icon(Icons.search),
+              // );
             }
           },
         )
@@ -91,19 +92,25 @@ class _ReceitaListPageState
   Widget getBody() {
     return Observer(
       builder: (_) {
+        if (controller.receitas == null) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+
         if (controller.receitas.error != null) {
           return Center(
             child: Text("Não foi possível carregar receitas!"),
           );
         }
 
-        if (controller.receitas.value == null) {
+        if (controller.receitas.data == null) {
           return Center(
             child: CircularProgressIndicator(),
           );
         }
 
-        List<Receita> receitas = controller.receitas.value;
+        List<Receita> receitas = controller.receitas.data;
 
         var size = receitas.length;
         var isEmpty = receitas.isEmpty;

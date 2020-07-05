@@ -6,7 +6,9 @@ import 'page/form/receita_form_module.dart';
 
 class ReceitaModule extends ChildModule {
   @override
-  List<Bind> get binds => [];
+  List<Bind> get binds => [
+        // (i) => ReceitaFirestore(),
+      ];
 
   @override
   List<Router> get routers => [

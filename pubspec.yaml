@@ -17,6 +17,7 @@ environment:
   sdk: ">=2.1.0 <3.0.0"
 
 dependencies:
+  cloud_firestore: ^0.13.7
   firebase_auth: ^0.16.1
   shared_preferences: ^0.5.7+3
   flutter_native_admob: ^2.1.0

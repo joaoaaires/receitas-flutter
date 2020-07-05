@@ -28,8 +28,7 @@ class _ReceitaChecklistPageState
   void didChangeDependencies() {
     super.didChangeDependencies();
     final Receita receita = ModalRoute.of(context).settings.arguments;
-    controller.receita = receita;
-    controller.load();
+    controller.load(receita);
   }
 
   @override
@@ -74,7 +73,6 @@ class _ReceitaChecklistPageState
         children: <Widget>[
           getTitleReceita(),
           getChecklistReceita(),
-          // getButtonFinalizarReceita(),
         ],
       ),
     );
@@ -108,12 +106,6 @@ class _ReceitaChecklistPageState
           ],
         ),
       ),
-      // child: ListView(
-      //   physics: BouncingScrollPhysics(),
-      //   children: <Widget>[
-
-      //   ],
-      // ),
     );
   }
 
@@ -136,7 +128,8 @@ class _ReceitaChecklistPageState
             ingredientes.length,
             (index) {
               var ingrediente = ingredientes[index];
-              var key = "I${ingrediente.id}";
+              // var key = "I${ingrediente.id}";
+              var key = "I$index";
               return Observer(
                 builder: (_) {
                   return ListTile(
@@ -174,7 +167,8 @@ class _ReceitaChecklistPageState
             modosPreparo.length,
             (index) {
               var modoPreparo = modosPreparo[index];
-              var key = "M${modoPreparo.id}";
+              // var key = "M${modoPreparo.id}";
+              var key = "M$index";
               return ListTile(
                 leading: Checkbox(
                   value: controller.value(key),
@@ -217,21 +211,16 @@ class _ReceitaChecklistPageState
   }
 
   void onPressEditReceita() async {
-    var clickInButtonSave = await Modular.to.pushNamed(
+    var receitaResponse = await Modular.to.pushNamed(
       "/receita/form",
       arguments: controller.receita,
     );
-    if (clickInButtonSave != null && clickInButtonSave) {
-      controller.load();
-    }
+    controller.load(receitaResponse);
   }
 
   void onPressDeleteReceita() {
     DialogCustom.showProgress(context);
     controller.delete().then((response) {
-      var receitaListController = Modular.get<ReceitaListController>();
-      receitaListController.update();
-      
       Navigator.pop(context);
       Modular.to.pop(true);
     }).catchError((error) {
@@ -243,5 +232,4 @@ class _ReceitaChecklistPageState
       );
     });
   }
-
 }

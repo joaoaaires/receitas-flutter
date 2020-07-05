@@ -1,9 +1,6 @@
 import 'package:flutter_modular/flutter_modular.dart';
 
-import '../../../shared/helper/client_http_helper.dart';
-import '../../../shared/helper/database_helper.dart';
-import '../../repository/ingrediente_repository.dart';
-import '../../repository/modo_preparo_repository.dart';
+import '../../../shared/helper/shared_preferences_helper.dart';
 import '../../repository/receita_repository.dart';
 import 'receita_checklist_controller.dart';
 import 'receita_checklist_page.dart';
@@ -11,15 +8,8 @@ import 'receita_checklist_page.dart';
 class ReceitaChecklistModule extends ChildModule {
   @override
   List<Bind> get binds => [
-        Bind((i) => ReceitaChecklistController(
-              i.get<ClientHttpHelper>(),
-              i.get<ReceitaRepository>(),
-              i.get<IngredienteRepository>(),
-              i.get<ModoPreparoRepository>(),
-            )),
-        Bind((i) => ModoPreparoRepository(i.get<DatabaseHelper>())),
-        Bind((i) => IngredienteRepository(i.get<DatabaseHelper>())),
-        Bind((i) => ReceitaRepository(i.get<DatabaseHelper>())),
+        Bind((i) => ReceitaChecklistController(i.get<ReceitaRepository>())),
+        Bind((i) => ReceitaRepository(i.get<SharedPreferencesHelper>())),
       ];
 
   @override

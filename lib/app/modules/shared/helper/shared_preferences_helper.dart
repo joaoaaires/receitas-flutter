@@ -19,24 +19,14 @@ class SharedPreferencesHelper {
     _sharedPreferences ??= await SharedPreferences.getInstance();
   }
 
-  Future<int> getId() async {
+  Future<String> getId() async {
     await _loadShared();
-    return _sharedPreferences?.getInt('id');
+    return _sharedPreferences?.getString('id');
   }
 
-  Future<Null> setId(int id) async {
+  Future<Null> setId(String id) async {
     await _loadShared();
-    await _sharedPreferences?.setInt('id', id);
-  }
-
-  Future<String> getNome() async {
-    await _loadShared();
-    return _sharedPreferences?.getString('nome');
-  }
-
-  Future<Null> setNome(String nome) async {
-    await _loadShared();
-    await _sharedPreferences?.setString('nome', nome);
+    await _sharedPreferences?.setString('id', id);
   }
 
   Future<String> getEmail() async {
@@ -58,5 +48,4 @@ class SharedPreferencesHelper {
     await _loadShared();
     await _sharedPreferences?.setString('token', token);
   }
-
 }
