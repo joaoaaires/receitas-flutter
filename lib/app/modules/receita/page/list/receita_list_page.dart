@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_native_admob/flutter_native_admob.dart';
+import 'package:receitas/app/modules/usuario/usuario_controller.dart';
 
 import '../../model/receita.dart';
 import 'receita_list_controller.dart';
@@ -28,62 +29,13 @@ class _ReceitaListPageState
 
   Widget getAppBar() {
     return AppBar(
-      title: Observer(
-        builder: (_) {
-          var showCampoPesquisa = controller.showCampoPesquisa;
-          return showCampoPesquisa
-              ? TextField(
-                  autofocus: true,
-                  controller: controller.textEditingController,
-                  decoration: const InputDecoration(
-                    hintText: "Pesquisar",
-                    border: InputBorder.none,
-                    hintStyle: TextStyle(
-                      color: Colors.white30,
-                    ),
-                  ),
-                  cursorColor: Colors.black,
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 16.0,
-                  ),
-                )
-              : Text(widget.title);
-        },
-      ),
+      title: Text(widget.title),
       backgroundColor: Colors.transparent,
       elevation: 0.0,
       actions: <Widget>[
-        Observer(
-          builder: (_) {
-            var showCampoPesquisa = controller.showCampoPesquisa;
-            if (showCampoPesquisa) {
-              return SizedBox.shrink();
-            } else {
-              return SizedBox.shrink();
-              // return IconButton(
-              //   onPressed: () => Modular.to.pushNamed("/usuario/change"),
-              //   icon: Icon(Icons.lock_outline),
-              // );
-            }
-          },
-        ),
-        Observer(
-          builder: (_) {
-            var showCampoPesquisa = controller.showCampoPesquisa;
-            if (showCampoPesquisa) {
-              return IconButton(
-                onPressed: controller.showPesquisa,
-                icon: Icon(Icons.close),
-              );
-            } else {
-              return SizedBox.shrink();
-              // return IconButton(
-              //   onPressed: controller.showPesquisa,
-              //   icon: Icon(Icons.search),
-              // );
-            }
-          },
+        IconButton(
+          onPressed: onPressSignout,
+          icon: Icon(Icons.exit_to_app),
         )
       ],
     );
@@ -115,36 +67,21 @@ class _ReceitaListPageState
         var size = receitas.length;
         var isEmpty = receitas.isEmpty;
 
-        if (controller.showCampoPesquisa) {
-          if (isEmpty) size = size + 1;
+        size = size + 2;
+        if (isEmpty) size = size + 1;
 
-          return ListView.builder(
-            physics: BouncingScrollPhysics(),
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            itemCount: size,
-            itemBuilder: (_, index) {
-              if (index == 0 && isEmpty) return getItemMensagemInfoPesquisa();
+        return ListView.builder(
+          physics: BouncingScrollPhysics(),
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          itemCount: size,
+          itemBuilder: (_, index) {
+            if (index == 0) return getButtonNovaReceita();
+            if (index == 1) return getItemMenuAdMob();
+            if (index == 2 && isEmpty) return getItemMensagemInfo();
 
-              return getItemReceita(receitas[index]);
-            },
-          );
-        } else {
-          size = size + 2;
-          if (isEmpty) size = size + 1;
-
-          return ListView.builder(
-            physics: BouncingScrollPhysics(),
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            itemCount: size,
-            itemBuilder: (_, index) {
-              if (index == 0) return getButtonNovaReceita();
-              if (index == 1) return getItemMenuAdMob();
-              if (index == 2 && isEmpty) return getItemMensagemInfo();
-
-              return getItemReceita(receitas[index - 2]);
-            },
-          );
-        }
+            return getItemReceita(receitas[index - 2]);
+          },
+        );
       },
     );
   }
@@ -334,5 +271,15 @@ class _ReceitaListPageState
       "/receita/checklist",
       arguments: receita,
     );
+  }
+
+  void onPressSignout() {
+    var usuarioController = Modular.get<UsuarioController>();
+    usuarioController.signout().then(
+          (value) => Modular.to.pushNamedAndRemoveUntil(
+            '/usuario/signin',
+            (value) => false,
+          ),
+        );
   }
 }

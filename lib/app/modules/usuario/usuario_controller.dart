@@ -58,4 +58,8 @@ abstract class _UsuarioControllerBase with Store {
     await _firebaseAuth.sendPasswordResetEmail(email: usuarioForm.email);
     return "E-mail enviado!";
   }
+
+  Future<void> signout() async {
+    await _firebaseAuth.signOut();
+  }
 }

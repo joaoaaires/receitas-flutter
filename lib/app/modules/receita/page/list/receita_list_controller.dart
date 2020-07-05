@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_native_admob/native_admob_controller.dart';
 import 'package:mobx/mobx.dart';
-import 'package:receitas/app/modules/receita/model/receita.dart';
 
+import '../../model/receita.dart';
 import '../../repository/receita_repository.dart';
 
 part 'receita_list_controller.g.dart';
@@ -18,8 +18,6 @@ abstract class _ReceitaListControllerBase extends Disposable with Store {
   double height = 0;
   @observable
   ObservableStream<List<Receita>> receitas;
-  @observable
-  bool showCampoPesquisa = false;
 
   final ReceitaRepository receitaRepository;
   final bool _kReleaseMode = const bool.fromEnvironment("dart.vm.product");
@@ -64,14 +62,6 @@ abstract class _ReceitaListControllerBase extends Disposable with Store {
 
       default:
         break;
-    }
-  }
-
-  @action
-  void showPesquisa() {
-    showCampoPesquisa = !showCampoPesquisa;
-    if (!showCampoPesquisa) {
-      textEditingController.text = "";
     }
   }
 

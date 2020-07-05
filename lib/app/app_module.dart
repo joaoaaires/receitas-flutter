@@ -7,11 +7,13 @@ import 'modules/home/home_module.dart';
 import 'modules/receita/receita_module.dart';
 import 'modules/shared/helper/shared_preferences_helper.dart';
 import 'modules/splash/splash_module.dart';
+import 'modules/usuario/usuario_controller.dart';
 import 'modules/usuario/usuario_module.dart';
 
 class AppModule extends MainModule {
   @override
   List<Bind> get binds => [
+        Bind((i) => UsuarioController(i.get<SharedPreferencesHelper>())),
         Bind((i) => SharedPreferencesHelper()),
         Bind((i) => AppController()),
       ];

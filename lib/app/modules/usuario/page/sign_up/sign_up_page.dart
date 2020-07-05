@@ -171,7 +171,7 @@ class _SignUpPageState extends ModularState<SignUpPage, UsuarioController> {
       controller.signup(_usuarioForm).then(
         (value) {
           Navigator.pop(context);
-          Modular.to.pushReplacementNamed('/home');
+          Modular.to.pushNamedAndRemoveUntil('/home', (value) => false);
         },
       ).catchError(
         (error) {

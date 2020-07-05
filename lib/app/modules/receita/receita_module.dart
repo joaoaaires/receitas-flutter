@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
+import '../shared/helper/shared_preferences_helper.dart';
+import '../usuario/usuario_controller.dart';
 import 'page/checklist/receita_checklist_module.dart';
 import 'page/form/receita_form_module.dart';
 
 class ReceitaModule extends ChildModule {
   @override
   List<Bind> get binds => [
-        // (i) => ReceitaFirestore(),
+        Bind((i) => UsuarioController(i.get<SharedPreferencesHelper>())),
       ];
 
   @override

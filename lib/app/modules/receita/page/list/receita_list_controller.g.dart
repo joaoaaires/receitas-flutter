@@ -43,37 +43,8 @@ mixin _$ReceitaListController on _ReceitaListControllerBase, Store {
     }, _$receitasAtom, name: '${_$receitasAtom.name}_set');
   }
 
-  final _$showCampoPesquisaAtom =
-      Atom(name: '_ReceitaListControllerBase.showCampoPesquisa');
-
-  @override
-  bool get showCampoPesquisa {
-    _$showCampoPesquisaAtom.context.enforceReadPolicy(_$showCampoPesquisaAtom);
-    _$showCampoPesquisaAtom.reportObserved();
-    return super.showCampoPesquisa;
-  }
-
-  @override
-  set showCampoPesquisa(bool value) {
-    _$showCampoPesquisaAtom.context.conditionallyRunInAction(() {
-      super.showCampoPesquisa = value;
-      _$showCampoPesquisaAtom.reportChanged();
-    }, _$showCampoPesquisaAtom, name: '${_$showCampoPesquisaAtom.name}_set');
-  }
-
   final _$_ReceitaListControllerBaseActionController =
       ActionController(name: '_ReceitaListControllerBase');
-
-  @override
-  void showPesquisa() {
-    final _$actionInfo =
-        _$_ReceitaListControllerBaseActionController.startAction();
-    try {
-      return super.showPesquisa();
-    } finally {
-      _$_ReceitaListControllerBaseActionController.endAction(_$actionInfo);
-    }
-  }
 
   @override
   void showAdMob() {
@@ -100,7 +71,7 @@ mixin _$ReceitaListController on _ReceitaListControllerBase, Store {
   @override
   String toString() {
     final string =
-        'height: ${height.toString()},receitas: ${receitas.toString()},showCampoPesquisa: ${showCampoPesquisa.toString()}';
+        'height: ${height.toString()},receitas: ${receitas.toString()}';
     return '{$string}';
   }
 }
