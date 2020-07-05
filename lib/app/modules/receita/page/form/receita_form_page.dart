@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:receitas/app/modules/receita/model/ingrediente.dart';
 
 import '../../../shared/util/validator/validator.dart';
 import '../../../shared/widget/dialog_custom.dart';
 import '../../../shared/widget/text_form_field_custom.dart';
 import '../../model/receita.dart';
 import '../../widget/receita_dots.dart';
-import '../list/receita_list_controller.dart';
 import 'form_ingrediente/receita_form_ingrediente_page.dart';
 import 'form_modo_preparo/receita_form_modo_preparo_page.dart';
 import 'receita_form_controller.dart';

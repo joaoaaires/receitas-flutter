@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_native_admob/flutter_native_admob.dart';
-import 'package:receitas/app/modules/usuario/usuario_controller.dart';
 
+import '../../../usuario/usuario_controller.dart';
 import '../../model/receita.dart';
 import 'receita_list_controller.dart';
 

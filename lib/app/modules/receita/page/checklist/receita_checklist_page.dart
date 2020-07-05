@@ -7,7 +7,6 @@ import '../../../shared/widget/dialog_custom.dart';
 import '../../model/ingrediente.dart';
 import '../../model/modo_preparo.dart';
 import '../../model/receita.dart';
-import '../list/receita_list_controller.dart';
 import 'receita_checklist_controller.dart';
 
 class ReceitaChecklistPage extends StatefulWidget {

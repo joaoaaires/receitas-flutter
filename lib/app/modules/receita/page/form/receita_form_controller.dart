@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 
-import '../../../shared/model/response_http.dart';
 import '../../model/ingrediente.dart';
 import '../../model/modo_preparo.dart';
 import '../../model/receita.dart';

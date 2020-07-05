@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../shared/helper/shared_preferences_helper.dart';
-import '../model/ingrediente.dart';
-import '../model/modo_preparo.dart';
 import '../model/receita.dart';
 
 class ReceitaRepository {
